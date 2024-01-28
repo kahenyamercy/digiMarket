@@ -10,4 +10,6 @@ def test():
 @api_views.route("/test_db", methods=['GET'],  strict_slashes = False)
 def test_db():
     connect = connection.all(User)
-    return connect
+    for val in connect.values():
+        print(val.to_json())
+    return {}

@@ -2,10 +2,11 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from models.base import BaseModel
 
 Base =  declarative_base()
 
-class Address(Base):
+class Address(BaseModel, Base):
     __tablename__ = 'address'
 
     id = Column(Integer, primary_key=True)
@@ -14,7 +15,7 @@ class Address(Base):
     village = Column(String(30), nullable=True)
     
     
-class User(Base):
+class User(BaseModel, Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
