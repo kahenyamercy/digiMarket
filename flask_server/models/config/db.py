@@ -36,3 +36,11 @@ class DBConnection:
                     key = obj.__class__.__name__ + '.' + str(obj.id)
                     new_dict[key] = obj
         return (new_dict)
+    
+    def create(self, obj):
+        """adds obj to the current db session"""
+        self.__session.add(obj)
+        
+    def save(self):
+        """save all objects in the current db session and commit them"""
+        self.__session.Commit()
