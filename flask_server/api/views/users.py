@@ -7,7 +7,6 @@ import jwt
 import os
 from datetime import datetime, timedelta
 
-
 JWT_SECRET = os.getenv("JWT_SECRET")
 
 
