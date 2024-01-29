@@ -4,14 +4,27 @@ from models import connection
 from models.user import User, Address, Farmer, Wholesaler, Retailer
 from flask import request, jsonify
 import jwt
+import os
+from datetime import datetime, timedelta
+
+
+JWT_SECRET = os.getenv("JWT_SECRET")
+
+
+def generate_token(data):
+    """Generate JWT token"""
+    expiration_time = datetime.utcnow() + timedelta(minutes=30)
+    data['exp'] = expiration_time
+    access_token = jwt.encode(data, JWT_SECRET, algorithm="HS256")
+    return access_token
 
 
 @api_views.route("/users/create", methods=['POST'],  strict_slashes=False)
 def create_user():
     if "county" not in request.get_json():
-        return {"message": "Address fields required!"}
+        return {"message": "Address fields required!"}, 400
     elif "town" not in request.get_json():
-        return {"message": "Address fields required!"}
+        return {"message": "Address fields required!"}, 400
     else:
         data = request.get_json()
         village = data.get('village', None)
@@ -40,7 +53,7 @@ def create_user():
         else:
             retailer = Retailer(user_id=user.id)
             connection.save(retailer)
-        return user.to_json()
+        return jsonify(user.to_json())
 
 
 @api_views.route("/users/login", methods=['POST'],  strict_slashes=False)
@@ -61,6 +74,8 @@ def login():
         serialized_user = user.__dict__.copy()
 
         if data['password'] != serialized_user['password']:
-            return jsonify({"message": "Invalid password!"}), 400
+            return jsonify({"message": "Invalid credentials!"}), 400
 
-        return jsonify(user.to_json())
+        token = generate_token(user.to_json())
+
+        return jsonify({"access_token": token})
