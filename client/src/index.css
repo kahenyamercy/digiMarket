@@ -1,0 +1,85 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.register-cont{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-wrapper{
+  background-color: #33be33;
+  padding: 10px;
+  color: #ffffff;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-wrapper h1{
+  margin: 5px 0;
+}
+
+form{
+  width: 90%;
+}
+
+form .register-input{
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+.register-row{
+  display: flex;
+  gap: 10px;
+}
+
+.register-input label{
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.register-input input, .register-input select{
+  padding: 10px;
+  font-size: 18px;
+  color: #595757;
+  border: 1px solid rgb(247, 240, 23);
+  border-radius: 10px;
+  width: 100%;
+
+}
+
+input:focus, select:focus{
+  outline: none;
+}
+
+.register-btn{
+  margin-top: 10px;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+form p{
+  color: gray;
+  padding: 3px;
+  text-align: center;
+}
+
+.register-redirect{
+  color: purple;
+  text-decoration: underline;
+}

@@ -14,14 +14,12 @@ def token_required(func):
         # Check if the 'Authorization' header is present
         if 'Authorization' in request.headers:
             auth_header = request.headers['Authorization']
-            print(auth_header)
             # Extract the token from the 'Authorization' header
             token_parts = auth_header.split()
             if len(token_parts) == 2 and token_parts[0].lower() == 'bearer':
                 token = token_parts[1]
 
         # If no token is provided
-        print(token)
         if token is None:
             # 401 Unauthorized
             return jsonify({"message": "Token is missing"}), 401
