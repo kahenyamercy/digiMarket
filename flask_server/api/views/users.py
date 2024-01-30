@@ -26,12 +26,13 @@ def create_user():
         return {"message": "Address fields required!"}, 400
     else:
         data = request.get_json()
+        user = connection.get(User, data['username'])
+        if user:
+            return jsonify({"message": "User already exists!"}), 400
         village = data.get('village', None)
         address = Address(
             county=data['county'], town=data['town'], village=village)
-        print(address)
         connection.save(address)
-        print("Address id: " + str(address.id))
         username = data.get('username')
         email = data.get('email')
         full_name = data.get('full_name')
