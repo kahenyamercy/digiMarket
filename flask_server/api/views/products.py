@@ -3,31 +3,38 @@ from api.views import api_views
 from models import connection
 from models.user import User, Address, Farmer, Wholesaler, Retailer
 from flask import request, jsonify
-import jwt
-import os
-from datetime import datetime, timedelta
+from api.views.utils import token_required
 
-JWT_SECRET = os.getenv("JWT_SECRET")
+PRODUCT
+- id (P.K)
+- product id
+- product name
+- product image
+- product unit price
+- description
+- user_id
+categories[]
 
+PRODUCTCATEGORY
+- product_id (F.K)
+- category_id (F.K)
 
-def generate_token(data):
-    """Generate JWT token"""
-    expiration_time = datetime.utcnow() + timedelta(minutes=30)
-    data['exp'] = expiration_time
-    access_token = jwt.encode(data, JWT_SECRET, algorithm="HS256")
-    return access_token
+10, 
 
+CATEGORY
+- id (P.K)
+- category_name 
 
-@api_views.route("/users/create", methods=['POST'],  strict_slashes=False)
-def create_user():
-    if "county" not in request.get_json():
-        return {"message": "Address fields required!"}, 400
-    elif "town" not in request.get_json():
-        return {"message": "Address fields required!"}, 400
+@api_views.route("/product/create", methods=['POST'],  strict_slashes=False)
+@token_required
+def create_us():
+    if "name" not in request.get_json():
+        return {"message": "Product name required!"}, 400
+    elif "categories" not in request.get_json():
+        return {"message": "Product must have atleast one category"}, 400
     else:
         data = request.get_json()
-        user = connection.get(User, username=data['username'])
-        print(user)
+        product = connection.get(Product, data['username'])
         if user:
             return jsonify({"message": "User already exists!"}), 400
         village = data.get('village', None)
@@ -67,7 +74,7 @@ def login():
         return {"message": "Password is required!"}, 400
     else:
         # Check whether the email is in database
-        user = connection.get(User, username=data['username'])
+        user = connection.get(User, data['username'])
 
         if user is None:
             return jsonify({"message": "Invalid credential!"}), 400

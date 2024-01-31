@@ -42,7 +42,13 @@ class DBConnection:
     def create(self, obj):
         """adds obj to the current db session"""
         self.__session.add(obj)
+    def save(self, obj):
+       """adds obj to the current db session and commits them"""
+       self.__session.add(obj)
+       self.__session.commit()
         
-    def save(self):
-        """save all objects in the current db session and commit them"""
-        self.__session.commit()
+       
+    def get(self, cls=None, *args, **kwargs):
+        # Assuming YourModel is the SQLAlchemy model class representing your table
+        obj = self.__session.query(cls).filter_by(**kwargs).first()
+        return obj
