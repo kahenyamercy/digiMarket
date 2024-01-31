@@ -1,9 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
+
+function getUser() {
+  const access_token = localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token"))
+    : null;
+
+  if (access_token) {
+    const decodedInfo = jwtDecode(access_token);
+    return decodedInfo;
+  }
+  return null;
+}
 
 const initialState = {
   loading: false,
-  access_token: null,
-  userInfo: null,
+  userInfo: getUser(),
   error: null,
   success: false,
 };

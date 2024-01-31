@@ -39,6 +39,7 @@ export const login = (formDetails) => async (dispatch) => {
     );
 
     const decodedInfo = jwtDecode(data.access_token);
+    localStorage.setItem("token", JSON.stringify(data.access_token));
     dispatch(userLoginSuccess(decodedInfo));
   } catch (err) {
     console.log(err);
