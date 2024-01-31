@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   access_token: null,
+  userInfo: null,
   error: null,
   success: false,
 };
@@ -28,7 +29,7 @@ export const userSlice = createSlice({
     },
     userLoginSuccess: (state, action) => {
       state.loading = false;
-      state.access_token = action.payload;
+      state.userInfo = action.payload;
     },
     userLoginFail: (state, action) => {
       state.loading = false;
