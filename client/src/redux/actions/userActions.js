@@ -2,6 +2,7 @@ import {
   userLoginFail,
   userLoginStart,
   userLoginSuccess,
+  userLogout,
   userRegisterFail,
   userRegisterStart,
   userRegisterSuccess,
@@ -47,4 +48,9 @@ export const login = (formDetails) => async (dispatch) => {
       userLoginFail(err.response ? err.response.data.message : err.message)
     );
   }
+};
+
+export const logout = () => (dispatch) => {
+  dispatch(userLogout());
+  localStorage.removeItem("token");
 };
