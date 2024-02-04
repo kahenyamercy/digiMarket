@@ -69,13 +69,13 @@ def login():
         return {"message": "Password is required!"}, 400
     else:
         # Check whether the email is in database
-        user = connection.get(User, username=data['username'])[0]
-
-        if user is None:
+        user_list = connection.get(User, username=data['username'])
+        
+        if len(user_list) == 0:
             return jsonify({"message": "Invalid credential!"}), 400
-
+        user = user_list[0]
         serialized_user = user.__dict__.copy()
-
+     
         if data['password'] != serialized_user['password']:
             return jsonify({"message": "Invalid credentials!"}), 400
 
