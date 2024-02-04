@@ -26,7 +26,7 @@ const Login = () => {
     if (user) {
       navigate("/");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <div className='register-cont'>
