@@ -6,6 +6,7 @@ from flask import request, jsonify
 import jwt
 import os
 from datetime import datetime, timedelta
+from api.views.utils import token_required
 
 JWT_SECRET = os.getenv("JWT_SECRET")
 
@@ -18,6 +19,7 @@ def generate_token(data):
     return access_token
 
 
+# REGISTER
 @api_views.route("/users/create", methods=['POST'],  strict_slashes=False)
 def create_user():
     if "county" not in request.get_json():
@@ -26,7 +28,8 @@ def create_user():
         return {"message": "Address fields required!"}, 400
     else:
         data = request.get_json()
-        user = connection.get(User, data['username'])
+        user = connection.get(User, username=data['username'])[0]
+        print(user)
         if user:
             return jsonify({"message": "User already exists!"}), 400
         village = data.get('village', None)
@@ -55,7 +58,7 @@ def create_user():
             connection.save(retailer)
         return jsonify(user.to_json())
 
-
+# LOGIN
 @api_views.route("/users/login", methods=['POST'],  strict_slashes=False)
 def login():
     """Takes the username/email and password and checks whether they exist in db"""
@@ -66,16 +69,28 @@ def login():
         return {"message": "Password is required!"}, 400
     else:
         # Check whether the email is in database
-        user = connection.get(User, data['username'])
-
-        if user is None:
+        user_list = connection.get(User, username=data['username'])
+        
+        if len(user_list) == 0:
             return jsonify({"message": "Invalid credential!"}), 400
-
+        user = user_list[0]
         serialized_user = user.__dict__.copy()
-
+     
         if data['password'] != serialized_user['password']:
             return jsonify({"message": "Invalid credentials!"}), 400
 
         token = generate_token(user.to_json())
 
         return jsonify({"access_token": token})
+
+
+# GET SINGLE USER
+@api_views.route("/users/<int:user_id>/", methods=['GET'],  strict_slashes=False)
+@token_required
+def get_user_details(user_id):
+    """Get user by id"""
+    user = connection.get(User, id=user_id)[0]
+    user_info = user.to_json()
+    address = connection.get(Address, id=user.address_id)[0]
+    user_info['address'] = address.to_json()
+    return jsonify(user_info)

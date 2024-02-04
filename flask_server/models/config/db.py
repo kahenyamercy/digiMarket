@@ -30,19 +30,24 @@ class DBConnection:
     
     def all(self, cls=None):
         """query on the current database session"""
-        new_dict = {}
+        new_list = []
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
-                    key = obj.__class__.__name__ + '.' + str(obj.id)
-                    new_dict[key] = obj
-        return (new_dict)
+                    new_list.append(obj)
+        return (new_list)
     
     def create(self, obj):
         """adds obj to the current db session"""
         self.__session.add(obj)
+    def save(self, obj):
+       """adds obj to the current db session and commits them"""
+       self.__session.add(obj)
+       self.__session.commit()
         
-    def save(self):
-        """save all objects in the current db session and commit them"""
-        self.__session.commit()
+       
+    def get(self, cls=None, *args, **kwargs):
+        # Assuming YourModel is the SQLAlchemy model class representing your table
+        obj = self.__session.query(cls).filter_by(**kwargs).all()
+        return obj
