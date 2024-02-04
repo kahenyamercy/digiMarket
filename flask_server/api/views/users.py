@@ -26,7 +26,7 @@ def create_user():
         return {"message": "Address fields required!"}, 400
     else:
         data = request.get_json()
-        user = connection.get(User, username=data['username'])
+        user = connection.get(User, username=data['username'])[0]
         print(user)
         if user:
             return jsonify({"message": "User already exists!"}), 400
@@ -67,7 +67,7 @@ def login():
         return {"message": "Password is required!"}, 400
     else:
         # Check whether the email is in database
-        user = connection.get(User, username=data['username'])
+        user = connection.get(User, username=data['username'])[0]
 
         if user is None:
             return jsonify({"message": "Invalid credential!"}), 400
