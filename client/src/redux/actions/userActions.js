@@ -9,15 +9,13 @@ import {
 } from "../slices/userSlices";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../URL";
 
 export const registerUser = (formDetails) => async (dispatch) => {
   try {
     dispatch(userRegisterStart());
 
-    const { data } = await axios.post(
-      "http://127.0.0.1:5000/api/v1/users/create/",
-      formDetails
-    );
+    const { data } = await axios.post(`${BASE_URL}/users/create/`, formDetails);
 
     console.log(data);
 
@@ -35,7 +33,7 @@ export const login = (formDetails) => async (dispatch) => {
     dispatch(userLoginStart());
 
     const { data } = await axios.post(
-      "http://127.0.0.1:5000/api/v1/users/login/",
+      `${BASE_URL}/users/login/`,
       formDetails
     );
 
