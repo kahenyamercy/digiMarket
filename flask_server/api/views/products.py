@@ -69,7 +69,10 @@ def get_categry_products(category_id):
 @token_required
 def get_product(product_id):
     """Get product by id"""
-    product = connection.get(Product, id=product_id)[0]
+    product_list = connection.get(Product, id=product_id)
+    if len(product_list) == 0:
+        return jsonify({"message" : "Product not found" }), 404
+    product = product_list[0]
     product_categories = connection.get(ProductCategory, product_id=product.id)
     new_product = product.to_json()
     cat_list = []

@@ -14,8 +14,8 @@ def create_category():
         return {"message": "Product name required!"}, 400
     else:
         data = request.get_json()
-        category = connection.get(Category, name=data['name'])[0]
-        if category:
+        category_list = connection.get(Category, name=data['name'])
+        if len(category_list) > 0:
             return jsonify({"message": "Category already exists!"}), 400
         
         image = data.get('image', None)
