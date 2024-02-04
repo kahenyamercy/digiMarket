@@ -84,7 +84,7 @@ def login():
         return jsonify({"access_token": token})
 
 
-# GET SINGLE PRODUCTS
+# GET SINGLE USER
 @api_views.route("/users/<int:user_id>/", methods=['GET'],  strict_slashes=False)
 @token_required
 def get_user_details(user_id):
