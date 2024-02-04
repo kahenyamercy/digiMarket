@@ -1,89 +1,51 @@
 #!/usr/bin/python3
 from api.views import api_views
 from models import connection
-from models.user import User, Address, Farmer, Wholesaler, Retailer
+from models.product import Product, Category, ProductCategory
 from flask import request, jsonify
 from api.views.utils import token_required
 
-PRODUCT
-- id (P.K)
-- product id
-- product name
-- product image
-- product unit price
-- description
-- user_id
-categories[]
-
-PRODUCTCATEGORY
-- product_id (F.K)
-- category_id (F.K)
-
-10, 
-
-CATEGORY
-- id (P.K)
-- category_name 
-
-@api_views.route("/product/create", methods=['POST'],  strict_slashes=False)
+@api_views.route("/products/create", methods=['POST'],  strict_slashes=False)
 @token_required
-def create_us():
+def create_product():
     if "name" not in request.get_json():
         return {"message": "Product name required!"}, 400
     elif "categories" not in request.get_json():
         return {"message": "Product must have atleast one category"}, 400
     else:
         data = request.get_json()
-        product = connection.get(Product, data['username'])
-        if user:
-            return jsonify({"message": "User already exists!"}), 400
-        village = data.get('village', None)
-        address = Address(
-            county=data['county'], town=data['town'], village=village)
-        connection.save(address)
-        username = data.get('username')
-        email = data.get('email')
-        full_name = data.get('full_name')
-        phone_number = data.get('phone_number')
-        password = data.get('password')
-        role = data.get('role', "retailer")
+        product = connection.get(Product, name=data['name'])
+        if len(product) > 0:
+            return jsonify({"message": "Product with that name already exists!"}), 400
+        name = data.get('name')
+        image = data.get('image')
+        price = data.get('price')
+        description = data.get('description')
 
-        user = User(username=username, email=email, full_name=full_name,
-                    phone_number=phone_number, password=password, address_id=address.id)
-        connection.save(user)
+        new_product = Product(name=name, image=image, price=price, description=description, user_id=request.user)
+        connection.save(new_product)
 
-        if role == "farmer":
-            farmer = Farmer(user_id=user.id)
-            connection.save(farmer)
-        elif role == 'wholesaler':
-            wholesaler = Wholesaler(user_id=user.id)
-            connection.save(wholesaler)
-        else:
-            retailer = Retailer(user_id=user.id)
-            connection.save(retailer)
-        return jsonify(user.to_json())
+        for cat_id in data.get('categories'):
+            product_category = ProductCategory(category_id=cat_id, product_id=new_product.id)
+            connection.save(product_category)
+
+        return jsonify(new_product.to_json())
 
 
-@api_views.route("/users/login", methods=['POST'],  strict_slashes=False)
-def login():
-    """Takes the username/email and password and checks whether they exist in db"""
-    data = request.get_json()
-    if "username" not in data:
-        return {"message": "Username is required!"}, 400
-    elif "password" not in data:
-        return {"message": "Password is required!"}, 400
-    else:
-        # Check whether the email is in database
-        user = connection.get(User, data['username'])
-
-        if user is None:
-            return jsonify({"message": "Invalid credential!"}), 400
-
-        serialized_user = user.__dict__.copy()
-
-        if data['password'] != serialized_user['password']:
-            return jsonify({"message": "Invalid credentials!"}), 400
-
-        token = generate_token(user.to_json())
-
-        return jsonify({"access_token": token})
+# GET ALL PRODUCTS
+@api_views.route("/products/", methods=['GET'],  strict_slashes=False)
+@token_required
+def get_products():
+    """Get all products"""
+    new_list = []
+    products = connection.all(Product)
+    for product in products:
+        product_cats = []
+        product_categories = connection.get(ProductCategory, product_id=product.id)
+        for cat in product_categories:
+            category_item = connection.get(Category, id=cat.category_id)
+            product_cats.append(category_item[0].to_json())
+        new_product = product.to_json()
+        new_product['categories'] = product_cats
+        new_list.append(new_product)
+    return jsonify(new_list)

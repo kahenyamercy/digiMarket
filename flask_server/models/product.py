@@ -19,6 +19,7 @@ class Category(BaseModel, Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255),  unique=True)
+    image = Column(String(255), nullable=True)
     
    
 class ProductCategory(BaseModel, Base):
