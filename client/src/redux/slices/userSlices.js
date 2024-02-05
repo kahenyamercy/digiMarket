@@ -8,7 +8,7 @@ function getUser() {
 
   if (access_token) {
     const decodedInfo = jwtDecode(access_token);
-    return decodedInfo;
+    return { ...decodedInfo, token: access_token};
   }
   return null;
 }

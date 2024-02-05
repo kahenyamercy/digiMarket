@@ -1,15 +1,16 @@
 import axios from "axios";
 import { getCategoriesFail, getCategoriesStart, getCategoriesSuccess } from "../slices/categorySlices"
 import { BASE_URL } from "../../URL";
+import { logout } from "./userActions";
 
-export const listCategories = () => async (dispatch) => {
+export const listCategories = () => async (dispatch,  getState) => {
     dispatch(getCategoriesStart())
     try{
-
+    const {user: {userInfo}}  = getState();
     const config = {
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZnVsbF9uYW1lIjoiV2FtYWUgTmRpcml0dSIsImVtYWlsIjoid2FtYWVAZ21haWwuY29tIiwicGhvbmVfbnVtYmVyIjoiMDc0NjIxNTg3OSIsInVzZXJuYW1lIjoid2FtYWUiLCJhZGRyZXNzX2lkIjoxLCJleHAiOjE3MDcwODkwMjF9.UnJ8X8QV1bVjqyA3AEK_V06s7zxGM9d1CPdSt4PRu2I",
+          `Bearer ${userInfo.token}`,
       },
     };
 
@@ -18,7 +19,11 @@ export const listCategories = () => async (dispatch) => {
     dispatch(getCategoriesSuccess(data))
 
     }catch(err){
-        console.log(err);
-        dispatch(getCategoriesFail(err.response ? err.response.data.message : err.message))
-    }
+        const errorMessage = err.response ? err.response.data.message : err.message;
+        dispatch(getCategoriesFail(errorMessage))
+        
+        if (errorMessage === 'Token has expired' ){
+          dispatch(logout());
+        }
+      }
 }

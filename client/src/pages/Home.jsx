@@ -6,7 +6,7 @@ import CategorySection from "../components/CategorySection";
 const Home = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
-
+  console.log(userInfo)
   const handleLogout = () => {
     dispatch(logout());
   };
