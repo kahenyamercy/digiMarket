@@ -9,9 +9,8 @@ const CategorySection = () => {
   
   useEffect(() => {
     dispatch(listCategories())
-  }, [])
+  }, [dispatch])
 
-  console.log(categoryList)
   return (
     <div className='mx-4 md:mx-16 p-4 mt-3 bg-slate-100'>
       <div className='flex justify-between mx-4'>
