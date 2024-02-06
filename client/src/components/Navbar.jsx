@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ const Navbar = () => {
       <section className='flex gap-4 md:gap-10 grid grid-cols-1 md:grid-cols-8 px-4 relative'>
         <div className='col-span-1 md:col-span-2 flex items-center'>
           <h1 className='mt-1 md:my-auto font-bold text-3xl md:text-4xl text-lime-700'>
-            digiMarket
+            <Link to='/'>digiMarket</Link>
           </h1>
         </div>
         <div className='mb-4 md:pb-0 md:p-4 flex gap-1 col-span-1 md:col-span-4'>
@@ -56,7 +56,10 @@ const Navbar = () => {
         </div>
       </section>
       <div className='flex h-12 justify-between px-4 bg-lime-300 text-gray-700 py-2'>
-        <section className='flex items-center category-list category-list-hide' id='categorySection'>
+        <section
+          className='flex items-center category-list category-list-hide'
+          id='categorySection'
+        >
           <ul className='flex gap-3'>
             <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
               Fruits
@@ -91,7 +94,10 @@ const Navbar = () => {
           <h1 className='my-auto font-semibold text-xl text-lime-800'>
             Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
           </h1>
-          <button className='border border-gray-700 rounded px-1 cursor-pointer btn-hide' onClick={toggleCategories}>
+          <button
+            className='border border-gray-700 rounded px-1 cursor-pointer btn-hide'
+            onClick={toggleCategories}
+          >
             <ListIcon style={{ color: "#ffffff", fontSize: "32px" }} />
           </button>
         </div>

@@ -12,6 +12,7 @@ export const categorySlice = createSlice({
   reducers: {
     getCategoriesStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
     getCategoriesSuccess: (state, action) => {
         state.loading = false;
