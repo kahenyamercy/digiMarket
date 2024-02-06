@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpIcon from "@mui/icons-material/Help";
+import ListIcon from "@mui/icons-material/List";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,11 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  const toggleCategories = () => {
+    const catSection = document.getElementById("categorySection");
+    catSection.classList.toggle("category-list-hide");
+  }
   return (
     <nav className=''>
       <section className='flex gap-4 md:gap-10 grid grid-cols-1 md:grid-cols-8 px-4 relative'>
@@ -50,7 +56,7 @@ const Navbar = () => {
         </div>
       </section>
       <div className='flex h-12 justify-between px-4 bg-lime-300 text-gray-700 py-2'>
-        <section className='flex items-center'>
+        <section className='flex items-center category-list category-list-hide' id='categorySection'>
           <ul className='flex gap-3'>
             <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
               Fruits
@@ -81,10 +87,13 @@ const Navbar = () => {
             </li>
           </ul>
         </section>
-        <div className='flex items-center'>
+        <div className='flex gap-5 items-center'>
           <h1 className='my-auto font-semibold text-xl text-lime-800'>
             Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
           </h1>
+          <button className='border border-gray-700 rounded px-1 cursor-pointer btn-hide' onClick={toggleCategories}>
+            <ListIcon style={{ color: "#ffffff", fontSize: "32px" }} />
+          </button>
         </div>
       </div>
     </nav>
