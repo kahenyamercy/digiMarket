@@ -2,11 +2,13 @@ import React from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
+import ProductTable from "./ProductsTable";
 
 const ProfileSection = () => {
   return (
-    <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 flex gap-5'>
-      <div className='md:col-span-2 bg-white shadow rounded p-4'>
+    <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
+      {/* Navigation bar for profile tabs */}
+      <div className='md:col-span-2 bg-white shadow rounded p-4 max-h-80'>
         <div className='flex gap-2 items-center text-gray-600 hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer'>
           <PersonOutlineIcon />
           <h3 className='text-lg my-auto'>My Account</h3>
@@ -20,9 +22,9 @@ const ProfileSection = () => {
           <h3 className='text-lg my-auto'>Orders</h3>
         </div>
       </div>
-      <div className='md:col-span-7'>
+      <section className='md:col-span-7'>
         {/* My Account section */}
-        <section className='flex flex-col gap-4 justify-center items-center shadow rouded p-4'>
+        {/* <section className=' flex flex-col gap-4 justify-center items-center shadow rouded p-4'>
           <div className='w-32 h-32 rounded-full border border-4 border-lime-400'>
             <img
               src='/assets/images/user-avatar.jpeg'
@@ -68,9 +70,9 @@ const ProfileSection = () => {
                 ut, iusto atque voluptates?
               </p>
             </div>
-          </section>
-          {/* Edit user info section */}
-          <section className='w-full border rounded p-4'>
+          </section> */}
+        {/* Edit user info section */}
+        {/* <section className='w-full border rounded p-4'>
             <h6 className='text-gray-600 font-semibold italic'>
               Edit User info
             </h6>
@@ -277,8 +279,13 @@ const ProfileSection = () => {
               Update details
             </button>
           </section>
+        </section> */}
+        {/* Products Section */}
+        <section className='rounded p-4'>
+          <h4 className="font-semibold text-xl text-gray-700 py-3">Products</h4>
+         <ProductTable />
         </section>
-      </div>
+      </section>
     </div>
   );
 };
