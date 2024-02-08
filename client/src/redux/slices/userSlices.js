@@ -16,6 +16,7 @@ function getUser() {
 const initialState = {
   loading: false,
   userInfo: getUser(),
+  userAddress: null,
   error: null,
   success: false,
 };
@@ -50,6 +51,9 @@ export const userSlice = createSlice({
     userLogout: (state) => {
       state.userInfo = null;
     },
+    getUserAddress: (state, action) => {
+      state.userAddress = action.payload;
+    }
   },
 });
 
@@ -61,6 +65,7 @@ export const {
   userRegisterSuccess,
   userRegisterFail,
   userLogout,
+  getUserAddress,
 } = userSlice.actions;
 
 export default userSlice.reducer;

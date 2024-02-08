@@ -94,3 +94,11 @@ def get_user_details(user_id):
     address = connection.get(Address, id=user.address_id)[0]
     user_info['address'] = address.to_json()
     return jsonify(user_info)
+
+# GET USER ADDRESS
+@api_views.route("/address/<int:address_id>/", methods=['GET'],  strict_slashes=False)
+@token_required
+def get_user_address(address_id):
+    """Get Address of a user"""
+    address = connection.get(Address, id=address_id)[0]
+    return jsonify(address.to_json())

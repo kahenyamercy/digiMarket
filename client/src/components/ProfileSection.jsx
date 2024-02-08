@@ -1,10 +1,16 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
 import ProductTable from "./ProductsTable";
+import {useDispatch, useSelector} from "react-redux";
+import { getAddress } from "../redux/actions/userActions";
+import { useParams } from "react-router-dom";
 
 const ProfileSection = () => {
+  const params = useParams();
+  const dispatch = useDispatch();
+  const {userInfo, userAddress} = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
 
@@ -17,6 +23,15 @@ const ProfileSection = () => {
       setShowAccount(false);
     }
   }
+
+  const addressId = params.id;
+
+  useEffect(() => {
+    dispatch(getAddress(addressId));
+  }, [dispatch, addressId])
+
+  console.log(userInfo)
+  console.log(userAddress)
   return (
     <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
@@ -58,22 +73,22 @@ const ProfileSection = () => {
             <div className='w-full flex flex-col items-center justify-center'>
               <div className='w-full flex items-center gap-5 justify-center'>
                 <h2 className='font-semibold text-xl text-gray-700'>
-                  Wamae Ndiritu
+                  {userInfo.full_name}
                 </h2>
                 <span className='px-4 bg-orange-200 rounded-sm py-1 text-red-500'>
                   Wholesaler
                 </span>
               </div>
-              <p className='text-gray-600'>wamaejoseph392@gmail.com</p>
-              <p className='text-gray-600'>Tel: 0740924507</p>
-              <p className='text-gray-600'>Username: wamae</p>
+              <p className='text-gray-600'>{userInfo.email}</p>
+              <p className='text-gray-600'>Tel: {userInfo.phone_number}</p>
+              <p className='text-gray-600'>Username: {userInfo.username}</p>
             </div>
             <section className='grid grid-cols-1 md:grid-cols-5 flex flex-wrap gap-2 md:gap-6'>
               <div className='col-span-1 md:col-span-2 border my-3 rounded px-4 flex flex-col py-3'>
                 <h6 className='text-start italic'>Location</h6>
                 <div className='flex gap-3'>
                   <h6 className='font-semibold'>County</h6>
-                  <p className='text-gray-600'>Nairobi</p>
+                  <p className='text-gray-600'>{userAddress.county}</p>
                 </div>
                 <div className='flex gap-3'>
                   <h6 className='font-semibold'>Town</h6>

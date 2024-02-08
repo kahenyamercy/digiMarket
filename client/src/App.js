@@ -30,7 +30,7 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='/shop/category/:id' element={<CategoryShop />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:id' element={<Profile />} />
         </Route>
       </Routes>
     </Router>
