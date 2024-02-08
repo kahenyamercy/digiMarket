@@ -10,6 +10,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import CategoryShop from "./pages/CategoryShop";
+import Profile from "./pages/Profile";
 function App() {
   const { userInfo } = useSelector((state) => state.user);
 
@@ -29,6 +30,7 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='/shop/category/:id' element={<CategoryShop />} />
+          <Route path='/profile' element={<Profile />} />
         </Route>
       </Routes>
     </Router>
