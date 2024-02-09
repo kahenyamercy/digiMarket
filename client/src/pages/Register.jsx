@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/actions/userActions";
+import LoadingSpinner from "../components/utilComponents/LoadingSpinner";
+import ErrorMessage from "../components/utilComponents/ErrorMessage";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -49,8 +51,8 @@ const Register = () => {
     <div className='register-cont'>
       <div className='register-wrapper'>
         <h1>Register to digiMarket</h1>
-        {loading && <p style={{ color: "yellow" }}>Loading...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {loading && <LoadingSpinner />}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <form onSubmit={handleSubmit}>
           <div className='register-input'>
             <label htmlFor='email'>Email</label>

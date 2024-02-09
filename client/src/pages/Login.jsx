@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import LoadingSpinner from "../components/utilComponents/LoadingSpinner";
+import ErrorMessage from "../components/utilComponents/ErrorMessage";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userInfo: user } = useSelector((state) => state.user);
+  const { loading, error, userInfo: user } = useSelector((state) => state.user);
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: "",
@@ -32,6 +34,8 @@ const Login = () => {
     <div className='register-cont'>
       <div className='register-wrapper'>
         <h1>Login to digiMarket</h1>
+        {loading && <LoadingSpinner/>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <form onSubmit={handleSubmit}>
           <div className='register-input'>
             <label htmlFor='username'>Username</label>

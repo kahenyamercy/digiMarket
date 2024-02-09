@@ -38,6 +38,7 @@ export const userSlice = createSlice({
     },
     userLoginStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
     userLoginSuccess: (state, action) => {
       state.loading = false;
