@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from api.views import api_views
 from models import connection
-from models.product import Category, Product
+from models.product import Category
 from flask import request, jsonify
 from api.views.utils import token_required
 
@@ -38,13 +38,3 @@ def get_categories():
     return jsonify(new_list)
 
 
-# GET USER PRODUCTS
-@api_views.route("/users/<int:user_id>/products/", methods=['GET'],  strict_slashes=False)
-@token_required
-def get_user_products(user_id):
-    """Get all products of a user"""
-    new_list = []
-    user_products = connection.get(Product, user_id=user_id)
-    for product in user_products:
-        new_list.append(product.to_json())
-    return jsonify(new_list)
