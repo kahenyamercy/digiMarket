@@ -84,52 +84,55 @@ const ProfileSection = () => {
       <section className='md:col-span-7'>
         {/* My Account section */}
         {showAccount && (
-          <section className=' flex flex-col gap-4 justify-center items-center shadow rouded p-4'>
-            <div className='w-32 h-32 rounded-full border border-4 border-lime-400'>
-              <img
-                src='/assets/images/user-avatar.jpeg'
-                alt='User'
-                className='w-full h-full rounded-full object-cover'
-              />
-            </div>
-            <div className='w-full flex flex-col items-center justify-center'>
-              <div className='w-full flex items-center gap-5 justify-center'>
-                <h2 className='font-semibold text-xl text-gray-700'>
-                  {userInfo.full_name}
-                </h2>
-                <span className='px-4 bg-orange-200 rounded-sm py-1 text-red-500'>
+          <section className=' flex flex-col gap-4 justify-center items-center rouded md:p-4'>
+            <h4 className="font-semibold text-lime-700 text-xl">My Account</h4>
+            <section className='w-full grid grid-cols-1 md:grid-cols-9 gap-3'>
+              <div className='col-span-1 md:col-span-3 flex flex-col items-center justify-center border rounded p-4 relative'>
+                <img
+                  src='/assets/images/user-avatar.jpeg'
+                  alt='User'
+                  className='w-32 h-32 rounded-full border border-4 border-lime-700 rounded-full object-cover'
+                />
+                <div className='w-full flex flex-col items-center justify-center mb-3'>
+                  <h2 className='font-semibold text-xl text-gray-700'>
+                    {userInfo.full_name}
+                  </h2>
+                  <p className='text-gray-600'>{userInfo.email}</p>
+                  <p className='text-gray-600'>Tel: {userInfo.phone_number}</p>
+                  <p className='text-gray-600'>Username: {userInfo.username}</p>
+                </div>
+                <span className='px-4 bg-lime-800 rounded-sm text-white absolute bottom-1 right-1'>
                   Wholesaler
                 </span>
               </div>
-              <p className='text-gray-600'>{userInfo.email}</p>
-              <p className='text-gray-600'>Tel: {userInfo.phone_number}</p>
-              <p className='text-gray-600'>Username: {userInfo.username}</p>
-            </div>
-            <section className='grid grid-cols-1 md:grid-cols-5 flex flex-wrap gap-2 md:gap-6'>
-              <div className='col-span-1 md:col-span-2 border my-3 rounded px-4 flex flex-col py-3'>
-                <h6 className='text-start italic'>Location</h6>
-                <div className='flex gap-3'>
-                  <h6 className='font-semibold'>County</h6>
-                  <p className='text-gray-600'>{userInfo?.address?.county}</p>
+              <section className='col-span-1 md:col-span-6'>
+                <div className='col-span-1 md:col-span-2 border my-3 rounded px-4 flex flex-col py-3'>
+                  <h6 className='text-start italic'>Location</h6>
+                  <div className='flex gap-3'>
+                    <h6 className='font-semibold'>County</h6>
+                    <p className='text-gray-600'>{userInfo?.address?.county}</p>
+                  </div>
+                  <div className='flex gap-3'>
+                    <h6 className='font-semibold'>Town</h6>
+                    <p className='text-gray-600'>{userInfo?.address?.town}</p>
+                  </div>
+                  <div className='flex gap-3'>
+                    <h6 className='font-semibold'>Village</h6>
+                    <p className='text-gray-600'>
+                      {userInfo?.address?.village}
+                    </p>
+                  </div>
                 </div>
-                <div className='flex gap-3'>
-                  <h6 className='font-semibold'>Town</h6>
-                  <p className='text-gray-600'>{userInfo?.address?.town}</p>
+                <div className='col-span-1 md:col-span-3 border my-3 rounded px-4 flex flex-col py-3'>
+                  <h6 className='text-start italic'>Bio</h6>
+                  <p className='text-gray-600'>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Dolorem vitae deleniti maiores sint autem recusandae tempora
+                    quasi eaque nihil. Eligendi tenetur possimus quibusdam nobis
+                    distinctio odio ut, iusto atque voluptates?
+                  </p>
                 </div>
-                <div className='flex gap-3'>
-                  <h6 className='font-semibold'>Village</h6>
-                  <p className='text-gray-600'>{userInfo?.address?.village}</p>
-                </div>
-              </div>
-              <div className='col-span-1 md:col-span-3 border my-3 rounded px-4 flex flex-col py-3'>
-                <h6 className='text-start italic'>Bio</h6>
-                <p className='text-gray-600'>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorem vitae deleniti maiores sint autem recusandae tempora
-                  quasi eaque nihil. Eligendi tenetur possimus quibusdam nobis
-                  distinctio odio ut, iusto atque voluptates?
-                </p>
-              </div>
+              </section>
             </section>
             {/* Edit user info section */}
             <form
@@ -139,10 +142,8 @@ const ProfileSection = () => {
               <h6 className='text-gray-600 font-semibold italic'>
                 Edit User info
               </h6>
-              <LoadingSpinner />
-              {formErr && (
-                <ErrorMessage>{formErr}</ErrorMessage>
-              )}
+              {/* <LoadingSpinner /> */}
+              {formErr && <ErrorMessage>{formErr}</ErrorMessage>}
               <div className='grid md:grid-cols-9 flex gap-2'>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label

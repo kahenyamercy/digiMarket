@@ -38,9 +38,9 @@ const Navbar = () => {
           </button>
         </div>
         <div className='col-span-1 md:col-span-2 flex items-center justify-center md:justify-end gap-2 md:gap-4 absolute top-1 right-1'>
-          <div className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link to='/profile' className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
             <PersonOutlineIcon />
-          </div>
+          </Link>
           <div className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
             <ShoppingBasketIcon />
           </div>
