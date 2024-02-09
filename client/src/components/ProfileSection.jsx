@@ -1,12 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
 import ProductTable from "./ProductsTable";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
+import LoadingSpinner from "./utilComponents/LoadingSpinner";
+import ErrorMessage from "./utilComponents/ErrorMessage";
 
 const ProfileSection = () => {
-  const {userInfo } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
   const [userData, setUserData] = useState(userInfo);
@@ -14,8 +16,9 @@ const ProfileSection = () => {
   const [passData, setPassData] = useState({
     current_password: "",
     password: "",
-    confirm_password: ""
-  })
+    confirm_password: "",
+  });
+  const [formErr, setFormErr] = useState(null);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -30,18 +33,27 @@ const ProfileSection = () => {
   };
 
   const handleTab = (tabname) => {
-    if (tabname === 'account'){
+    if (tabname === "account") {
       setShowAccount(true);
       setShowProductTab(false);
-    } else if (tabname === 'products'){
+    } else if (tabname === "products") {
       setShowProductTab(true);
       setShowAccount(false);
     }
-  }
+  };
 
-
-  console.log(userInfo)
-  console.log("Component rendered!")
+  const handleUpdateUserDetails = (e) => {
+    e.preventDefault();
+    setFormErr(null);
+    if (passData.password !== "") {
+      if (passData.current_password === "") {
+        setFormErr("Current password required!");
+      }
+      if (passData.confirm_password !== passData.password) {
+        setFormErr("Password must match!");
+      }
+    }
+  };
   return (
     <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
@@ -120,10 +132,17 @@ const ProfileSection = () => {
               </div>
             </section>
             {/* Edit user info section */}
-            <section className='w-full border rounded p-4'>
+            <form
+              className='w-full border rounded p-4'
+              onSubmit={handleUpdateUserDetails}
+            >
               <h6 className='text-gray-600 font-semibold italic'>
                 Edit User info
               </h6>
+              <LoadingSpinner />
+              {formErr && (
+                <ErrorMessage>{formErr}</ErrorMessage>
+              )}
               <div className='grid md:grid-cols-9 flex gap-2'>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
@@ -340,10 +359,13 @@ const ProfileSection = () => {
                   </div>
                 </div>
               </div>
-              <button className='w-72 bg-lime-400 text-white px-4 py-1 rounded my-3'>
+              <button
+                type='submit'
+                className='w-72 bg-lime-400 text-white px-4 py-1 rounded my-3'
+              >
                 Update details
               </button>
-            </section>
+            </form>
           </section>
         )}
         {/* Products Section */}
