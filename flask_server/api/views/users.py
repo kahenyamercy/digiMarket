@@ -78,8 +78,12 @@ def login():
      
         if data['password'] != serialized_user['password']:
             return jsonify({"message": "Invalid credentials!"}), 400
+        
+        user_info = user.to_json()
+        address = connection.get(Address, id=user.address_id)[0]
+        user_info['address'] = address.to_json()
 
-        token = generate_token(user.to_json())
+        token = generate_token(user_info)
 
         return jsonify({"access_token": token})
 

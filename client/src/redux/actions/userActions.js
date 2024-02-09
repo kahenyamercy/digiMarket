@@ -1,5 +1,4 @@
 import {
-  getUserAddress,
   userLoginFail,
   userLoginStart,
   userLoginSuccess,
@@ -46,30 +45,6 @@ export const login = (formDetails) => async (dispatch) => {
     dispatch(
       userLoginFail(err.response ? err.response.data.message : err.message)
     );
-  }
-};
-
-export const getAddress = (id) => async (dispatch, getState) => {
-  try {
-    const {
-      user: { userInfo },
-    } = getState();
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const { data } = await axios.get(`${BASE_URL}/address/${id}/`, config);
-    console.log(data);
-    
-    dispatch(getUserAddress(data));
-  } catch (err) {
-    console.log(err)
-    const errorMessage = err.response ? err.response.data.message : err.message;
-
-    if (errorMessage === "Token has expired") {
-      dispatch(logout());
-    }
   }
 };
 

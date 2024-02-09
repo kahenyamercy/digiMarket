@@ -1,18 +1,33 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
 import ProductTable from "./ProductsTable";
-import {useDispatch, useSelector} from "react-redux";
-import { getAddress } from "../redux/actions/userActions";
-import { useParams } from "react-router-dom";
+import { useSelector} from "react-redux";
 
 const ProfileSection = () => {
-  const params = useParams();
-  const dispatch = useDispatch();
-  const {userInfo, userAddress} = useSelector((state) => state.user);
+  const {userInfo } = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
+  const [userData, setUserData] = useState(userInfo);
+  const [userAddressData, setUserAddressData] = useState(userInfo.address);
+  const [passData, setPassData] = useState({
+    current_password: "",
+    password: "",
+    confirm_password: ""
+  })
+
+  const handleChange = (e) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddressChange = (e) => {
+    setUserAddressData({ ...userAddressData, [e.target.name]: e.target.value });
+  };
+
+  const handlePassChange = (e) => {
+    setPassData({ ...passData, [e.target.name]: e.target.value });
+  };
 
   const handleTab = (tabname) => {
     if (tabname === 'account'){
@@ -24,14 +39,9 @@ const ProfileSection = () => {
     }
   }
 
-  const addressId = params.id;
-
-  useEffect(() => {
-    dispatch(getAddress(addressId));
-  }, [dispatch, addressId])
 
   console.log(userInfo)
-  console.log(userAddress)
+  console.log("Component rendered!")
   return (
     <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
@@ -88,15 +98,15 @@ const ProfileSection = () => {
                 <h6 className='text-start italic'>Location</h6>
                 <div className='flex gap-3'>
                   <h6 className='font-semibold'>County</h6>
-                  <p className='text-gray-600'>{userAddress.county}</p>
+                  <p className='text-gray-600'>{userInfo?.address?.county}</p>
                 </div>
                 <div className='flex gap-3'>
                   <h6 className='font-semibold'>Town</h6>
-                  <p className='text-gray-600'>Nairobi</p>
+                  <p className='text-gray-600'>{userInfo?.address?.town}</p>
                 </div>
                 <div className='flex gap-3'>
                   <h6 className='font-semibold'>Village</h6>
-                  <p className='text-gray-600'>Kangemi</p>
+                  <p className='text-gray-600'>{userInfo?.address?.village}</p>
                 </div>
               </div>
               <div className='col-span-1 md:col-span-3 border my-3 rounded px-4 flex flex-col py-3'>
@@ -117,18 +127,19 @@ const ProfileSection = () => {
               <div className='grid md:grid-cols-9 flex gap-2'>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='fullName'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='fullName'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Full Name
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='full_name'
+                        value={userData.full_name}
+                        onChange={handleChange}
                         id='fullName'
-                        autocomplete='username'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='Jane Smith'
                       />
@@ -137,18 +148,19 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='username'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='username'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Username
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='username'
+                        value={userData.username}
+                        onChange={handleChange}
                         id='username'
-                        autocomplete='username'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='janesmith'
                       />
@@ -157,18 +169,19 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='email'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='email'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
-                    Username
+                    Email
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='email'
+                        value={userData.email}
+                        onChange={handleChange}
                         id='email'
-                        autocomplete='username'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='janesmith098@gmail.com'
                       />
@@ -179,16 +192,18 @@ const ProfileSection = () => {
               <div className='grid md:grid-cols-9 flex gap-2'>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='current_password'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='current_password'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Current Password
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
-                        type='text'
+                        type='password'
                         name='current_password'
+                        value={passData.current_password}
+                        onChange={handlePassChange}
                         id='current_password'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='********'
@@ -198,16 +213,18 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='new_password'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='new_password'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     New Password
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
-                        type='text'
+                        type='password'
                         name='password'
+                        value={passData.password}
+                        onChange={handlePassChange}
                         id='new_password'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='********'
@@ -217,16 +234,18 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='confirm_password'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='confirm_password'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Confirm Password
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
-                        type='text'
-                        name='password_1'
+                        type='password'
+                        name='confirm_password'
+                        value={passData.confirm_password}
+                        onChange={handlePassChange}
                         id='confirm_password'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='********'
@@ -238,16 +257,18 @@ const ProfileSection = () => {
               <div className='grid md:grid-cols-9 flex gap-2'>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='phone'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='phone'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Contact/Telephone
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
-                        name='phone_no'
+                        name='phone_number'
+                        value={userData.phone_number}
+                        onChange={handleChange}
                         id='phone'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='07** *** ***'
@@ -257,16 +278,18 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='county'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='county'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     County
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='county'
+                        value={userAddressData.county}
+                        onChange={handleAddressChange}
                         id='county'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='Nyeri'
@@ -276,16 +299,18 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='town'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='town'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Town
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='town'
+                        value={userAddressData.town}
+                        onChange={handleAddressChange}
                         id='town'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='Chaka'
@@ -295,16 +320,18 @@ const ProfileSection = () => {
                 </div>
                 <div className='col-span-1 md:col-span-3 mt-2'>
                   <label
-                    for='village'
-                    class='block text-sm font-medium leading-6 text-gray-900'
+                    htmlFor='village'
+                    className='block text-sm font-medium leading-6 text-gray-900'
                   >
                     Village/Ward/Shopping Centre
                   </label>
-                  <div class='mt-2'>
-                    <div class='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
+                  <div className='mt-2'>
+                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-lime-400 px-2'>
                       <input
                         type='text'
                         name='village'
+                        value={userAddressData.village}
+                        onChange={handleAddressChange}
                         id='village'
                         className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
                         placeholder='Kiganjo/Kirichu'
@@ -313,7 +340,7 @@ const ProfileSection = () => {
                   </div>
                 </div>
               </div>
-              <button class='w-72 bg-lime-400 text-white px-4 py-1 rounded my-3'>
+              <button className='w-72 bg-lime-400 text-white px-4 py-1 rounded my-3'>
                 Update details
               </button>
             </section>
