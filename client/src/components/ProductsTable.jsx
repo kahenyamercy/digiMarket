@@ -1,68 +1,114 @@
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { DataGrid } from "@mui/x-data-grid";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
+const columns = [
+  { field: "id", headerName: "ID", width: 30 },
+  {
+    field: "name",
+    headerName: "Product Title",
+    width: 200,
+  },
+  {
+    field: "price",
+    headerName: "Price",
+    width: 100,
+    renderCell: (params) => {
+      return (
+        <div className="flex justify-center">
+          <h6 className="bg-indigo-300 px-2 text-white rounded-full">
+            KES {params.row.price}
+          </h6>
+        </div>
+      )
+    }
+  },
+  {
+    field: "unit",
+    headerName: "Unit",
+    width: 100,
+  },
+  {
+    field: "description",
+    headerName: "Description",
+    description: "This column has a value getter and is not sortable.",
+    sortable: false,
+    width: 250,
+  },
+  {
+    field: "categories",
+    headerName: "Categories",
+    width: 100,
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <div className='flex gap-3 items-center'>
+          <VisibilityIcon className='text-blue-400 cursor-pointer' />
+          <EditIcon className='text-green-400 cursor-pointer' />
+          <DeleteOutlineOutlinedIcon className='text-red-400 cursor-pointer' />
+        </div>
+      );
+    },
+  },
+];
 
 const rows = [
   {
     id: 1,
     name: "Water Melon",
-    categories: "Fruits, Vegetables",
+    price: 40,
+    unit: "1Kg",
+    categories: "water melon",
+    description: "Sweet water melon, ready for the market.",
+  },
+  {
+    id: 2,
+    name: "Water Melon - Grade B",
+    categories: "water melon",
+    description: "Sweet water melon for Grade B, ready for the market.",
     price: "40",
     unit: "1Kg",
   },
   {
-    id: 2,
+    id: 3,
     name: "Machungwa Tamu Sana",
-    categories: "Fruits, Vegetables",
+    categories: "Oranges",
+    description: "Machungwa Kutoka Ukambani, ready for the market.",
     price: "70",
     unit: "1Kg",
   },
 ];
 
-export default function ProductTable() {
+export default function ProductsTable() {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-        <TableHead>
-          <TableRow>
-            <TableCell>Product Title</TableCell>
-            <TableCell align='left'>Price</TableCell>
-            <TableCell align='left'>Unit</TableCell>
-            <TableCell align='left'>Categories</TableCell>
-            <TableCell align='left'>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component='th' scope='row'>
-                {row.name}
-              </TableCell>
-              <TableCell align='left'>{row.price}</TableCell>
-              <TableCell align='left'>{row.unit}</TableCell>
-              <TableCell align='left'>{row.categories}</TableCell>
-              <TableCell align='left'>
-                <div className='flex gap-3 items-center'>
-                  <VisibilityIcon className='text-blue-400 cursor-pointer' />
-                  <EditIcon className='text-green-400 cursor-pointer' />
-                  <DeleteOutlineOutlinedIcon className='text-red-400 cursor-pointer' />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className='grid grid-cols-1'>
+      <div className='col-span-1'>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          // checkboxSelection
+          disableRowSelectionOnClick
+          sx={{
+            "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
+              outline: "none",
+            },
+          }}
+        />
+      </div>
+    </div>
   );
 }

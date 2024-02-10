@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
-import ProductTable from "./ProductsTable";
+import ProductsTable from "./ProductsTable";
 import { useSelector } from "react-redux";
-import LoadingSpinner from "./utilComponents/LoadingSpinner";
 import ErrorMessage from "./utilComponents/ErrorMessage";
+import AddIcon from "@mui/icons-material/Add";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 const ProfileSection = () => {
   const { userInfo } = useSelector((state) => state.user);
@@ -19,6 +20,7 @@ const ProfileSection = () => {
     confirm_password: "",
   });
   const [formErr, setFormErr] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -81,11 +83,11 @@ const ProfileSection = () => {
           <h3 className='text-lg my-auto'>Orders</h3>
         </button>
       </div>
-      <section className='md:col-span-7'>
+      <section className='col-span-1 md:col-span-7'>
         {/* My Account section */}
         {showAccount && (
-          <section className=' flex flex-col gap-4 justify-center items-center rouded md:p-4'>
-            <h4 className="font-semibold text-lime-700 text-xl">My Account</h4>
+          <section className='flex flex-col gap-4 justify-center items-center rouded md:p-4'>
+            <h4 className='font-semibold text-lime-700 text-xl'>My Account</h4>
             <section className='w-full grid grid-cols-1 md:grid-cols-9 gap-3'>
               <div className='col-span-1 md:col-span-3 flex flex-col items-center justify-center border rounded p-4 relative'>
                 <img
@@ -371,12 +373,46 @@ const ProfileSection = () => {
         )}
         {/* Products Section */}
         {showProductTab && (
-          <section className='rounded p-4'>
-            <h4 className='font-semibold text-xl text-gray-700 py-3'>
-              Products
-            </h4>
-            <ProductTable />
-          </section>
+          <Tabs>
+            <TabList>
+              <Tab>One</Tab>
+              <Tab>Two</Tab>
+              <Tab>Three</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <section className='w-full rounded md:p-4 mb-4 relative'>
+                  <h4 className='font-semibold text-lime-700 text-xl mb-3'>
+                    My Account
+                  </h4>
+                  <div className='mb-14'>
+                    <ProductsTable />
+                  </div>
+                  <button
+                    className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    style={{
+                      transition: "width 0.7s ease",
+                      width: isHovered ? "auto" : "40px", // Adjust width as needed
+                      padding: isHovered ? "10px" : "10px", // Adjust padding as needed
+                      justifyContent: isHovered ? "flex-start" : "center",
+                    }}
+                  >
+                    <AddIcon />
+                    {isHovered && <h6>Add Product</h6>}
+                  </button>
+                </section>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>three!</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         )}
       </section>
     </div>
