@@ -11,6 +11,9 @@ def create_order():
     order_delivered = request.json.get('order_delivered')
     order_items = request.json.get('order_items')
     
+    # Check if order_items is None
+    if order_items is None:
+        return jsonify({"error": "order_items is missing"}), 400
     
     # Create an Order instance
     order = Order(order_paid=order_paid, order_delivered=order_delivered)
