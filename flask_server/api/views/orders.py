@@ -4,7 +4,7 @@ from models import connection
 from models.orders import Order, OrderDetails
 from flask import request, jsonify
 
-@api_views.route("/orders/create", methods=['POST'])
+@api_views.route("/orders/create", methods=['POST'], strict_slashes=False)
 def create_order():
     # Extract attributes from the request data
     order_paid = request.json.get('order_paid')
