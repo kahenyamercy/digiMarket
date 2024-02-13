@@ -17,6 +17,7 @@ def create_order():
     
     # Create an Order instance
     order = Order(order_paid=order_paid, order_delivered=order_delivered)
+    connection.save(order)
     
     # Create OrderDetails instances for each order item
     for item in order_items:
@@ -24,8 +25,8 @@ def create_order():
         qty = item.get('qty')
         total_price = item.get('total_price')
         
-        order_detail = OrderDetails(order=order, product_id=product_id, qty=qty, total_price=total_price)
+        order_detail = OrderDetails(order_id=order.id, product_id=product_id, qty=qty, total_price=total_price)
         order.order_details.append(order_detail)
-        
+        connection.save(order_detail)
 
     return jsonify({"message": "Order created successfully", "order_id": order.id}), 201

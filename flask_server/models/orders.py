@@ -12,7 +12,7 @@ class Order(BaseModel, Base):
     order_delivered = Column(Boolean, default=False)
     
     # Define the relationship with OrderDetails
-    #order_details = relationship("OrderDetails", back_populates="order", cascade="all, delete-orphan")
+    order_details = relationship("OrderDetails", back_populates="order", cascade="all, delete-orphan")
 
 class OrderDetails(BaseModel, Base):
     __tablename__ = 'order_details'
@@ -23,5 +23,5 @@ class OrderDetails(BaseModel, Base):
     total_price = Column(Float)
     
     # Define the relationship with Order
-    #order = relationship("Order", back_populates="order_details")
+    order = relationship("Order", back_populates="order_details")
 
