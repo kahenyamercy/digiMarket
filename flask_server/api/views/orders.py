@@ -30,3 +30,28 @@ def create_order():
         connection.save(order_detail)
 
     return jsonify({"message": "Order created successfully", "order_id": order.id}), 201
+
+# Retrieve Orders
+@api_views.route("/orders", methods=['GET'])
+def get_orders():
+    orders = Order.query.all()
+    orders_data = [{"id": order.id, "order_paid": order.order_paid, "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_delivered": order.order_delivered} for order in orders]
+    return jsonify(orders_data), 200
+
+# Retrieve Order by ID
+@api_views.route("/orders/<int:order_id>", methods=['GET'])
+def get_order(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"error": "Order not found"}), 404
+    order_data = {"id": order.id, "order_paid": order.order_paid, "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_delivered": order.order_delivered}
+    return jsonify(order_data), 200
+
+# Delete Order Detail
+@api_views.route("/orders/<int:order_id>/delete", methods=['DELETE'])
+def delete_order_detail(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"error": "Order not found"}), 404
+    connection.delete(order)
+    return jsonify({"message": "Order deleted successfully"}), 200  
