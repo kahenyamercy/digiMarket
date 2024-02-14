@@ -55,3 +55,18 @@ def delete_order_detail(order_id):
         return jsonify({"error": "Order not found"}), 404
     connection.delete(order)
     return jsonify({"message": "Order deleted successfully"}), 200  
+
+# Define the new API route to get user orders
+@api_views.route("/users/<int:user_id>/orders", methods=['GET'])
+def get_user_orders(user_id):
+    # Get all orders of a user
+    user_orders = [order_data(o) for o in Order.query.filter_by(user_id=user_id).all()]
+    
+    # Add 'is_owner' attribute to indicate whether the current logged-in user is the owner of the order or not
+    for order in user_orders:
+        order['is_owner'] = order['user_id'] == user_id
+        del order['user_id']
+    
+    return jsonify({'orders': user_orders}), 200
+
+   
