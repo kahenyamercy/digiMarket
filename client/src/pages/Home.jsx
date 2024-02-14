@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AgricultureIcon from "@mui/icons-material/Agriculture";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
+import FeaturedCard from "../components/featuresProducts/FeaturedCard";
 
 const Home = () => {
   const { categoryList } = useSelector(
@@ -76,14 +77,18 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white p-2 rounded mt-2 text-gray-800 flex flex-col items-center justify-center uppercase py-5">
+          <div className='bg-white p-2 rounded mt-2 text-gray-800 flex flex-col items-center justify-center uppercase py-5'>
             <h3>Call or Whatsapp</h3>
-            <h1 className="font-semibold">0740924507 / 0768805755</h1>
+            <h1 className='font-semibold'>0740924507 / 0768805755</h1>
             <h3>To Know more</h3>
           </div>
         </div>
       </section>
       <CategorySection />
+      <div className="md:px-16 px-4 my-2">
+        <h1 className='text-gray-900 text-xl font-semibold'>New Products</h1>
+        <FeaturedCard />
+      </div>
     </div>
   );
 };
