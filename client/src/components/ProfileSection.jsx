@@ -6,7 +6,6 @@ import ProductsTable from "./ProductsTable";
 import { useSelector } from "react-redux";
 import ErrorMessage from "./utilComponents/ErrorMessage";
 import AddIcon from "@mui/icons-material/Add";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 const ProfileSection = () => {
   const { userInfo } = useSelector((state) => state.user);

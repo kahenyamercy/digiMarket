@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,10 +40,7 @@ const SamplePrevArrow = (props) => {
   );
 };
 const FeaturedCard = () => {
-  const [count, setCount] = useState(0);
-  const increment = () => {
-    setCount(count + 1);
-  };
+
   const settings = {
     dots: false,
     infinite: true,
