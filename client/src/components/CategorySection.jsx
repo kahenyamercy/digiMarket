@@ -12,7 +12,7 @@ const CategorySection = () => {
   }, [dispatch])
 
   return (
-    <div className='md:mx-4 md:mx-16 p-4 mt-3'>
+    <div className='md:mx-16 p-4 mt-3'>
       <div className='flex justify-between mx-4'>
         {error && <p className='text-red'>{error}</p>}
         {loading && <p className='text-amber-400'>Loading...</p>}

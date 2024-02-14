@@ -373,46 +373,30 @@ const ProfileSection = () => {
         )}
         {/* Products Section */}
         {showProductTab && (
-          <Tabs>
-            <TabList>
-              <Tab>One</Tab>
-              <Tab>Two</Tab>
-              <Tab>Three</Tab>
-            </TabList>
-
-            <TabPanels>
-              <TabPanel>
-                <section className='w-full rounded md:p-4 mb-4 relative'>
-                  <h4 className='font-semibold text-lime-700 text-xl mb-3'>
-                    My Account
-                  </h4>
-                  <div className='mb-14'>
-                    <ProductsTable />
-                  </div>
-                  <button
-                    className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    style={{
-                      transition: "width 0.7s ease",
-                      width: isHovered ? "auto" : "40px", // Adjust width as needed
-                      padding: isHovered ? "10px" : "10px", // Adjust padding as needed
-                      justifyContent: isHovered ? "flex-start" : "center",
-                    }}
-                  >
-                    <AddIcon />
-                    {isHovered && <h6>Add Product</h6>}
-                  </button>
-                </section>
-              </TabPanel>
-              <TabPanel>
-                <p>two!</p>
-              </TabPanel>
-              <TabPanel>
-                <p>three!</p>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <>
+            <section className='w-full rounded md:p-4 mb-4 relative'>
+              <h4 className='font-semibold text-lime-700 text-xl mb-3'>
+                Products
+              </h4>
+              <div className='mb-14'>
+                <ProductsTable />
+              </div>
+              <button
+                className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  transition: "width 0.7s ease",
+                  width: isHovered ? "auto" : "40px", // Adjust width as needed
+                  padding: isHovered ? "10px" : "10px", // Adjust padding as needed
+                  justifyContent: isHovered ? "flex-start" : "center",
+                }}
+              >
+                <AddIcon />
+                {isHovered && <h6>Add Product</h6>}
+              </button>
+            </section>
+          </>
         )}
       </section>
     </div>
