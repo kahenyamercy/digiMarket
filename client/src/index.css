@@ -95,6 +95,9 @@ form p{
 }
 
 @media (max-width: 525.5px){
+  .mobile-hide{
+    display: none;
+  }
   .category-list{
     z-index: 999;
     height: auto;
