@@ -56,7 +56,7 @@ const ProfileSection = () => {
     }
   };
   return (
-    <div className='px-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
+    <div className='bg-gray-100 p-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
       <div className='md:col-span-2 bg-white shadow rounded p-4 max-h-80'>
         <button
@@ -82,7 +82,7 @@ const ProfileSection = () => {
           <h3 className='text-lg my-auto'>Orders</h3>
         </button>
       </div>
-      <section className='col-span-1 md:col-span-7'>
+      <section className='col-span-1 md:col-span-7 bg-white'>
         {/* My Account section */}
         {showAccount && (
           <section className='flex flex-col gap-4 justify-center items-center rouded md:p-4'>
