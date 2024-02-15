@@ -2,6 +2,7 @@
 from api.views import api_views
 from models import connection
 from models.orders import Order, OrderDetails
+from models.user import User
 from models.product import Product
 from flask import request, jsonify
 from models import connection
@@ -55,9 +56,11 @@ def get_user_orders(user_id):
         return jsonify({"message": "No orders found!"}), 400
     all_orders = []
     for order in user_orders:
+        user = connection.get(User, id=order.user_id)[0]
         order_info = order.to_json()
         order_info["created_at"] = order.created_at.strftime(
             "%Y-%m-%d %H:%M:%S")
+        order_info["full_name"] = user.full_name
         all_orders.append(order_info)
 
     return jsonify(all_orders), 200
