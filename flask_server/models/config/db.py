@@ -6,8 +6,9 @@ from os import getenv
 from models.user import User
 from models.base import Base
 from models.product import Product,  Category, ProductCategory
+from models.orders import Order, OrderDetails
 
-classes = {"User":User, "Product":Product, "Category":Category, "ProductCategory":ProductCategory}
+classes = {"User":User, "Product":Product, "Category":Category, "ProductCategory":ProductCategory, "Order": Order, "OrderDetails": OrderDetails}
 class DBConnection:
     __engine = None
     __session = None

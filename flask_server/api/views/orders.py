@@ -2,7 +2,9 @@
 from api.views import api_views
 from models import connection
 from models.orders import Order, OrderDetails
+from models.product import Product
 from flask import request, jsonify
+from models import connection
 
 @api_views.route("/orders/create", methods=['POST'], strict_slashes=False)
 def create_order():
@@ -41,10 +43,18 @@ def get_orders():
 # Retrieve Order by ID
 @api_views.route("/orders/<int:order_id>", methods=['GET'])
 def get_order(order_id):
-    order = Order.query.get(order_id)
-    if not order:
+    order = connection.get(Order, id=order_id)
+    if len(order) == 0:
         return jsonify({"error": "Order not found"}), 404
-    order_data = {"id": order.id, "order_paid": order.order_paid, "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_delivered": order.order_delivered}
+    order = order[0]
+    order_items = []
+    orderItems = connection.get(OrderDetails, order_id=order.id)
+    for item in orderItems:
+        product_info = connection.get(Product, id=item.product_id)[0]
+        order_item_info = item.to_json()
+        order_item_info["product"] = product_info.to_json()
+        order_items.append(order_item_info)
+    order_data = {"id": order.id, "order_paid": order.order_paid, "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_delivered": order.order_delivered, "order_items": order_items}
     return jsonify(order_data), 200
 
 # Delete Order Detail
