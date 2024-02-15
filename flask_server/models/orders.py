@@ -10,6 +10,8 @@ class Order(BaseModel, Base):
     order_paid = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     order_delivered = Column(Boolean, default=False)
+    amount = Column(Float, default=0.0)
+    user_id = Column(ForeignKey('user.id'), nullable=False)
     
     # Define the relationship with OrderDetails
     order_details = relationship("OrderDetails", back_populates="order", cascade="all, delete-orphan")
@@ -20,7 +22,7 @@ class OrderDetails(BaseModel, Base):
     order_id = Column(Integer, ForeignKey('order.id'), primary_key=True)
     product_id = Column(Integer, ForeignKey('product.id'), primary_key=True)
     qty = Column(Integer)
-    total_price = Column(Float)
+    price = Column(Float)
     
     # Define the relationship with Order
     order = relationship("Order", back_populates="order_details")
