@@ -14,6 +14,7 @@ export const productSlice = createSlice({
   reducers: {
     getCategoryProductsStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
     getCategoryProductsSuccess: (state, action) => {
       state.loading = false;

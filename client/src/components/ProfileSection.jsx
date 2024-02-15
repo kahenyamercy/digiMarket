@@ -8,13 +8,17 @@ import ErrorMessage from "./utilComponents/ErrorMessage";
 import AddIcon from "@mui/icons-material/Add";
 import { listUserProducts } from "../redux/actions/productActions";
 import LoadingSpinner from "./utilComponents/LoadingSpinner";
+import OrdersTable from "./orders/OrdersTable";
+import { listUserOrders } from "../redux/actions/orderActions";
 
 const ProfileSection = () => {
   const dispatch = useDispatch()
   const {loading, error, userProducts} = useSelector((state) => state.product);
+  const {loading: orderLoading, error: orderError, orders} = useSelector((state) => state.order);
   const { userInfo } = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
+  const [showOrderTab, setShowOrderTab] = useState(false);
   const [userData, setUserData] = useState(userInfo);
   const [userAddressData, setUserAddressData] = useState(userInfo.address);
   const [passData, setPassData] = useState({
@@ -41,9 +45,15 @@ const ProfileSection = () => {
     if (tabname === "account") {
       setShowAccount(true);
       setShowProductTab(false);
+      setShowOrderTab(false);
     } else if (tabname === "products") {
       setShowProductTab(true);
       setShowAccount(false);
+      setShowOrderTab(false);
+    } else if (tabname === "orders"){
+      setShowOrderTab(true);
+      setShowAccount(false);
+      setShowProductTab(false);
     }
   };
 
@@ -65,6 +75,12 @@ const ProfileSection = () => {
       dispatch(listUserProducts());
     }
   }, [dispatch, showProductTab])
+
+  useEffect(() => {
+    if (showOrderTab) {
+      dispatch(listUserOrders());
+    }
+  }, [dispatch, showOrderTab]);
   return (
     <div className='bg-gray-100 p-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
@@ -87,7 +103,12 @@ const ProfileSection = () => {
           <CategoryIcon />
           <h3 className='text-lg my-auto'>Products</h3>
         </button>
-        <button className='flex gap-2 items-center text-gray-600 mt-3 hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer'>
+        <button
+          className={`flex gap-2 items-center text-gray-600 mt-3 ${
+            showOrderTab && "bg-gray-100 rounded"
+          } hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer`}
+          onClick={() => handleTab("orders")}
+        >
           <ShoppingBasketIcon />
           <h3 className='text-lg my-auto'>Orders</h3>
         </button>
@@ -387,11 +408,45 @@ const ProfileSection = () => {
               <h4 className='font-semibold text-lime-700 text-xl mb-3'>
                 Products
               </h4>
-              {
-                loading ? <LoadingSpinner /> : error && <ErrorMessage>{error}</ErrorMessage>
-              }
+              {loading ? (
+                <LoadingSpinner />
+              ) : (
+                error && <ErrorMessage>{error}</ErrorMessage>
+              )}
               <div className='mb-14'>
                 <ProductsTable list={userProducts} />
+              </div>
+              <button
+                className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  transition: "width 0.7s ease",
+                  width: isHovered ? "auto" : "40px", // Adjust width as needed
+                  padding: isHovered ? "10px" : "10px", // Adjust padding as needed
+                  justifyContent: isHovered ? "flex-start" : "center",
+                }}
+              >
+                <AddIcon />
+                {isHovered && <h6>Add Product</h6>}
+              </button>
+            </section>
+          </>
+        )}
+        {/* Orders section */}
+        {showOrderTab && (
+          <>
+            <section className='w-full rounded md:p-4 mb-4 relative'>
+              <h4 className='font-semibold text-lime-700 text-xl mb-3'>
+                My Orders
+              </h4>
+              {orderLoading ? (
+                <LoadingSpinner />
+              ) : (
+                orderError && <ErrorMessage>{orderError}</ErrorMessage>
+              )}
+              <div className='mb-14'>
+                <OrdersTable list={orders} />
               </div>
               <button
                 className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
