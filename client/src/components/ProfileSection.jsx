@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import CategoryIcon from "@mui/icons-material/Category";
 import ProductsTable from "./ProductsTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorMessage from "./utilComponents/ErrorMessage";
 import AddIcon from "@mui/icons-material/Add";
+import { listUserProducts } from "../redux/actions/productActions";
+import LoadingSpinner from "./utilComponents/LoadingSpinner";
 
 const ProfileSection = () => {
+  const dispatch = useDispatch()
+  const {loading, error, userProducts} = useSelector((state) => state.product);
   const { userInfo } = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
@@ -55,6 +59,12 @@ const ProfileSection = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (showProductTab){
+      dispatch(listUserProducts());
+    }
+  }, [dispatch, showProductTab])
   return (
     <div className='bg-gray-100 p-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
       {/* Navigation bar for profile tabs */}
@@ -377,8 +387,11 @@ const ProfileSection = () => {
               <h4 className='font-semibold text-lime-700 text-xl mb-3'>
                 Products
               </h4>
+              {
+                loading ? <LoadingSpinner /> : error && <ErrorMessage>{error}</ErrorMessage>
+              }
               <div className='mb-14'>
-                <ProductsTable />
+                <ProductsTable list={userProducts} />
               </div>
               <button
                 className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'

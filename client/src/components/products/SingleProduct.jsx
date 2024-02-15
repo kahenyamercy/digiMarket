@@ -1,17 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PhoneIcon from "@mui/icons-material/Phone";
+import { useDispatch, useSelector } from "react-redux";
+import { getProduct } from "../../redux/actions/productActions";
+import { useParams } from "react-router-dom";
+import LoadingSpinner from "../utilComponents/LoadingSpinner";
+import ErrorMessage from "../utilComponents/ErrorMessage";
+import { getUserInfo } from "../../redux/actions/userActions";
 
 const SingleProduct = () => {
+  const params = useParams();
+  const productId = Number(params.id);
+  const dispatch = useDispatch();
+  const {loading, error, product} = useSelector((state) => state.product);
+  const {loading: userLoading, error: userError, userDetails} = useSelector((state) => state.user)
+
+  useEffect(() => {
+    dispatch(getProduct(productId))
+  }, [dispatch, productId])
+
+  useEffect(() => {
+      dispatch(getUserInfo(product?.user_id))
+  }, [dispatch, product])
+
   return (
     <div className='bg-white py-8'>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        error && <ErrorMessage>{error}</ErrorMessage>
+      )}
+      {userLoading ? (
+        <LoadingSpinner />
+      ) : (
+        userError && <ErrorMessage>{userError}</ErrorMessage>
+      )}
       <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex flex-col md:flex-row -mx-4'>
           <div className='md:flex-1 px-4'>
             <div className='h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4'>
               <img
                 className='w-full h-full object-cover'
-                src='/assets/banners/banner-1.jpg'
-                alt='Product'
+                src={product.image}
+                alt={product.name}
               />
             </div>
             <div className='flex -mx-2 mb-4'>
@@ -29,12 +59,23 @@ const SingleProduct = () => {
           </div>
           <div className='md:flex-1 px-4'>
             <h2 className='text-2xl font-bold text-gray-800 dark:text-white mb-2'>
-              Product Name
+              {product.name}
             </h2>
-            <p className='text-gray-600  text-sm mb-4'>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-              ante justo. Integer euismod libero id mauris malesuada tincidunt.
-            </p>
+            <div className='flex items-center my-2 gap-2'>
+              <span className='font-bold text-gray-700 dark:text-gray-300'>
+                Categories
+              </span>
+              {product.categories?.map((category) => {
+                return (
+                  <button
+                    className='bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600'
+                    key={category.id}
+                  >
+                    {category.name}
+                  </button>
+                );
+              })}
+            </div>
             <div className='flex mb-4'>
               <div className='mr-4'>
                 <span className='font-bold text-gray-700 dark:text-gray-300'>
@@ -42,7 +83,7 @@ const SingleProduct = () => {
                 </span>
                 <span className='text-lime-700 dark:text-gray-300 ml-2'>
                   {" "}
-                  KES 29.99
+                  KES {product.price}
                 </span>
               </div>
               <div>
@@ -50,7 +91,8 @@ const SingleProduct = () => {
                   Location:
                 </span>
                 <span className='text-gray-600 ml-2'>
-                  Kiganjo town, Nyeri county
+                  {userDetails?.address?.town} town,{" "}
+                  {userDetails?.address?.county} county
                 </span>
               </div>
             </div>
@@ -81,14 +123,7 @@ const SingleProduct = () => {
                 Product Description:
               </span>
               <p className='text-gray-600 dark:text-gray-300 text-sm mt-2'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-                ante justo. Integer euismod libero id mauris malesuada
-                tincidunt. Vivamus commodo nulla ut lorem rhoncus aliquet. Duis
-                dapibus augue vel ipsum pretium, et venenatis sem blandit.
-                Quisque ut erat vitae nisi ultrices placerat non eget velit.
-                Integer ornare mi sed ipsum lacinia, non sagittis mauris
-                blandit. Morbi fermentum libero vel nisl suscipit, nec tincidunt
-                mi consectetur.
+                {product.description}
               </p>
             </div>
             <section className='grid grid-cols-1 md:grid-cols-6'>
@@ -100,19 +135,25 @@ const SingleProduct = () => {
                   <h6 className='text-start italic'>Location</h6>
                   <div className='flex gap-3'>
                     <h6 className='font-semibold'>Farmer's Name</h6>
-                    <p className='text-gray-600'>John Doe</p>
+                    <p className='text-gray-600'>{userDetails.full_name}</p>
                   </div>
                   <div className='flex gap-3'>
                     <h6 className='font-semibold'>County</h6>
-                    <p className='text-gray-600'>Machakos</p>
+                    <p className='text-gray-600'>
+                      {userDetails?.address?.county}
+                    </p>
                   </div>
                   <div className='flex gap-3'>
                     <h6 className='font-semibold'>Town</h6>
-                    <p className='text-gray-600'>Kathiani</p>
+                    <p className='text-gray-600'>
+                      {userDetails?.address?.town}
+                    </p>
                   </div>
                   <div className='flex gap-3'>
                     <h6 className='font-semibold'>Village</h6>
-                    <p className='text-gray-600'>Kitini</p>
+                    <p className='text-gray-600'>
+                      {userDetails?.address?.village}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -121,7 +162,9 @@ const SingleProduct = () => {
                   className='text-lime-700'
                   style={{ fontSize: "42px", zIndex: 1 }}
                 />
-                <h1 className='text-2xl font-semibold'>0740924507</h1>
+                <h1 className='text-2xl font-semibold'>
+                  {userDetails.phone_number}
+                </h1>
               </div>
             </section>
           </div>
