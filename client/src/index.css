@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *{
   padding: 0;
   margin: 0;
@@ -82,4 +86,53 @@ form p{
 .register-redirect{
   color: purple;
   text-decoration: underline;
+}
+
+@media (min-width: 526.5px){
+  .btn-hide {
+    display: none;
+  }
+}
+
+@media (max-width: 525.5px){
+  .mobile-hide{
+    display: none;
+  }
+  .category-list{
+    z-index: 999;
+    height: auto;
+    position: relative;
+    transition: left 0.3s ease;
+      /* Add transition for left property */
+  }
+  .category-list ul{
+    background-color: rgb(190 242 100);
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 40px;
+    left: -16px;
+    margin: 0;
+    padding: 0;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+      /* Add transition for opacity and visibility */
+    opacity: 1;
+      /* Ensure it's fully visible by default */
+    visibility: visible;
+      /* Ensure it's visible by default */
+  }
+
+  .category-list ul li{
+    margin: 0 !important;
+    padding: 3px 10px;
+  }
+
+  .category-list-hide ul{ 
+    /* display: none; */
+    opacity: 0;
+      /* Set opacity to 0 when hidden */
+    visibility: hidden;
+      /* Hide the element */
+  }
 }

@@ -9,3 +9,4 @@ if True:
     from api.views.users import *
     from api.views.categories import *
     from api.views.products import *
+    from api.views.orders import *

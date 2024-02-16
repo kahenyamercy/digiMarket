@@ -2,6 +2,7 @@
 from api.views import api_views
 from models import connection
 from models.user import User, Address, Farmer, Wholesaler, Retailer
+from models.product import Product, ProductCategory, Category
 from flask import request, jsonify
 import jwt
 import os
@@ -78,8 +79,12 @@ def login():
      
         if data['password'] != serialized_user['password']:
             return jsonify({"message": "Invalid credentials!"}), 400
+        
+        user_info = user.to_json()
+        address = connection.get(Address, id=user.address_id)[0]
+        user_info['address'] = address.to_json()
 
-        token = generate_token(user.to_json())
+        token = generate_token(user_info)
 
         return jsonify({"access_token": token})
 
@@ -94,3 +99,30 @@ def get_user_details(user_id):
     address = connection.get(Address, id=user.address_id)[0]
     user_info['address'] = address.to_json()
     return jsonify(user_info)
+
+# GET USERS PRODUCTS
+@api_views.route("/users/<int:user_id>/products/", methods=['GET'],  strict_slashes=False)
+@token_required
+def get_user_products(user_id):
+    """Get all products of a user"""
+    new_list = []
+    products = connection.get(
+        Product, user_id=user_id)
+    for product in products:
+        product_categories = connection.get(ProductCategory, product_id=product.id)
+        categories = []
+        for cat in product_categories:
+            category = connection.get(Category, id=cat.category_id)[0]
+            categories.append(category.to_json())
+        product_info = product.to_json()
+        product_info['categories'] = categories
+        new_list.append(product_info)
+    return jsonify(new_list)
+
+# GET USER ADDRESS
+@api_views.route("/address/<int:address_id>/", methods=['GET'],  strict_slashes=False)
+@token_required
+def get_user_address(address_id):
+    """Get Address of a user"""
+    address = connection.get(Address, id=address_id)[0]
+    return jsonify(address.to_json())
