@@ -44,7 +44,7 @@ Welcome to **digiMarket**, an innovative digital marketplace where buyers and se
 4. Access the application in your web browser:
 
     ```
-    http://localhost:5000
+    http://localhost:3000
     ```
 
 ## Contributing
