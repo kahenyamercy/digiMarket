@@ -18,6 +18,8 @@ Welcome to **digiMarket**, an innovative digital marketplace where buyers and se
 - **SQLAlchemy**: An SQL toolkit and Object-Relational Mapping (ORM) library for Python.
 - **Bootstrap**: A popular front-end framework for designing responsive and mobile-first websites.
 - **SQLite**: A lightweight relational database management system.
+- **React**: A JavaScript library for building user interfaces, providing a fast and efficient way to create dynamic web applications.
+- **Tailwind CSS**: A utility-first CSS framework for quickly building custom designs without having to leave your HTML.
 
 ## Setup Instructions
 
