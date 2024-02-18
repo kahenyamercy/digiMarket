@@ -41,9 +41,9 @@ const Navbar = () => {
           <Link to='/profile' className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
             <PersonOutlineIcon />
           </Link>
-          <div className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link to='/cart' className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
             <ShoppingBasketIcon />
-          </div>
+          </Link>
           <div
             className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'
             onClick={handleLogout}

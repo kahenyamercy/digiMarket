@@ -12,6 +12,7 @@ import {
 import CategoryShop from "./pages/CategoryShop";
 import Profile from "./pages/Profile";
 import ProductPage from "./pages/ProductPage";
+import Cart from "./pages/Cart";
 function App() {
   const { userInfo } = useSelector((state) => state.user);
 
@@ -29,6 +30,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/shop/products/:id' element={<ProductPage />} />
+        <Route path='/cart' element={<Cart />} />
         <Route element={<AuthLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='/shop/category/:id' element={<CategoryShop />} />
