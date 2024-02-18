@@ -22,9 +22,12 @@ const ToastObjects = {
 const CartSection = () => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  const { loading, error, success_create } = useSelector((state) => state.order);
+  const { loading, error, success_create } = useSelector(
+    (state) => state.order
+  );
 
   const [subTotal, setSubTotal] = useState(0);
+  const [sortedCartItems, setSortedCartItems] = useState(cartItems);
 
   const handleCartQty = (id, qty, type) => {
     if (type === "dec") {
@@ -48,19 +51,22 @@ const CartSection = () => {
     dispatch(createOrder({ amount: subTotal, order_items: orderItems }));
   };
 
-
   useEffect(() => {
     if (success_create) {
       toast.success("Your order has been placed successfully!", ToastObjects);
       dispatch(clearState());
     }
-  }, [success_create, dispatch])
+  }, [success_create, dispatch]);
 
   useEffect(() => {
     const totals = cartItems
       .reduce((itemA, itemB) => itemA + itemB?.quantity * itemB.price, 0)
       .toFixed(2);
     setSubTotal(totals);
+    const sortedCartItems = [...cartItems].sort((a, b) => {
+      return cartItems.indexOf(b) - cartItems.indexOf(a);
+    });
+    setSortedCartItems(sortedCartItems);
   }, [cartItems]);
   return (
     <div className='justify-center flex-1 px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6'>
@@ -101,7 +107,7 @@ const CartSection = () => {
                   </h6>
                 </div>
               ) : (
-                cartItems.map((item) => {
+                sortedCartItems.map((item) => {
                   const { id, name, image, price, quantity } = item;
                   return (
                     <div
