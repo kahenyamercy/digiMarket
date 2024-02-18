@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -12,7 +13,7 @@ import ErrorMessage from "../utilComponents/ErrorMessage";
 const CartSection = () => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  const {loading, error} = useSelector((state) => state.order);
+  const { loading, error } = useSelector((state) => state.order);
 
   const [subTotal, setSubTotal] = useState(0);
 
@@ -34,8 +35,8 @@ const CartSection = () => {
   const handleCreateOrder = () => {
     const orderItems = cartItems.map((item) => {
       return { product_id: item.id, qty: item.quantity, price: item.price };
-    })
-    dispatch(createOrder({amount: subTotal, order_items: orderItems}))
+    });
+    dispatch(createOrder({ amount: subTotal, order_items: orderItems }));
   };
 
   useEffect(() => {
@@ -70,91 +71,105 @@ const CartSection = () => {
               </div>
             </div>
             <div className='py-4 mb-8 border-t border-b border-gray-200'>
-              {cartItems.map((item) => {
-                const { id, name, image, price, quantity } = item;
-                return (
-                  <div
-                    className='flex flex-wrap items-center mb-6 -mx-4 md:mb-8'
-                    key={id}
-                  >
-                    <div className='w-full px-4 mb-6 md:w-4/6 lg:w-6/12 md:mb-0'>
-                      <div className='flex flex-wrap items-center -mx-4'>
-                        <div className='w-full px-4 mb-3 md:w-1/3'>
-                          <div className='w-full h-96 md:h-24 md:w-24'>
-                            <img
-                              src={image}
-                              alt={name}
-                              className='object-cover w-full h-full'
-                            />
+              {cartItems.length === 0 ? (
+                <div className='p-6 border border-blue-100 bg-blue-50 md:p-8'>
+                  <h6 className='text-gray-600'>
+                    Your cart is empty!{" "}
+                    <Link
+                      to='/'
+                      className='text-lime-700 font-semibold underline'
+                    >
+                      Go Back to Shop
+                    </Link>
+                  </h6>
+                </div>
+              ) : (
+                cartItems.map((item) => {
+                  const { id, name, image, price, quantity } = item;
+                  return (
+                    <div
+                      className='flex flex-wrap items-center mb-6 -mx-4 md:mb-8'
+                      key={id}
+                    >
+                      <div className='w-full px-4 mb-6 md:w-4/6 lg:w-6/12 md:mb-0'>
+                        <div className='flex flex-wrap items-center -mx-4'>
+                          <div className='w-full px-4 mb-3 md:w-1/3'>
+                            <div className='w-full h-96 md:h-24 md:w-24'>
+                              <img
+                                src={image}
+                                alt={name}
+                                className='object-cover w-full h-full'
+                              />
+                            </div>
+                          </div>
+                          <div className='w-2/3 px-4'>
+                            <h2 className='mb-2 text-xl font-bold'>{name}</h2>
+                            <p
+                              className='text-red-500 italic text-xs cursor-pointer'
+                              onClick={() => handleRemoveCartItem(id)}
+                            >
+                              Remove
+                            </p>
                           </div>
                         </div>
-                        <div className='w-2/3 px-4'>
-                          <h2 className='mb-2 text-xl font-bold'>{name}</h2>
-                          <p
-                            className='text-red-500 italic text-xs cursor-pointer'
-                            onClick={() => handleRemoveCartItem(id)}
+                      </div>
+                      <div className='hidden px-4 lg:block lg:w-2/12'>
+                        <p className='text-lg font-bold text-lime-700'>
+                          KES {price}
+                        </p>
+                        <span className='text-xs text-gray-500 line-through'>
+                          KES {price + 0.1 * price}
+                        </span>
+                      </div>
+                      <div className='w-auto px-4 md:w-1/6 lg:w-2/12 '>
+                        <div className='inline-flex items-center px-4 font-semibold text-gray-500 border border-gray-200 rounded-md'>
+                          <button
+                            className='py-2 hover:text-gray-700'
+                            onClick={() => handleCartQty(id, quantity, "dec")}
                           >
-                            Remove
-                          </p>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='16'
+                              height='16'
+                              fill='currentColor'
+                              className='bi bi-dash'
+                              viewBox='0 0 16 16'
+                            >
+                              <path d='M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z'></path>
+                            </svg>
+                          </button>
+                          <input
+                            type='number'
+                            className='w-12 px-2 py-4 text-center border-0 rounded-md bg-gray-50 md:text-right'
+                            placeholder='1'
+                            value={quantity}
+                          />
+                          <button
+                            className='py-2 hover:text-gray-700'
+                            onClick={() => handleCartQty(id, quantity, "inc")}
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='16'
+                              height='16'
+                              fill='currentColor'
+                              className='bi bi-plus'
+                              viewBox='0 0 16 16'
+                            >
+                              <path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z'></path>
+                            </svg>
+                          </button>
                         </div>
                       </div>
-                    </div>
-                    <div className='hidden px-4 lg:block lg:w-2/12'>
-                      <p className='text-lg font-bold text-lime-700'>
-                        KES {price}
-                      </p>
-                      <span className='text-xs text-gray-500 line-through'>
-                        KES {price + 0.1 * price}
-                      </span>
-                    </div>
-                    <div className='w-auto px-4 md:w-1/6 lg:w-2/12 '>
-                      <div className='inline-flex items-center px-4 font-semibold text-gray-500 border border-gray-200 rounded-md'>
-                        <button
-                          className='py-2 hover:text-gray-700'
-                          onClick={() => handleCartQty(id, quantity, "dec")}
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='16'
-                            height='16'
-                            fill='currentColor'
-                            className='bi bi-dash'
-                            viewBox='0 0 16 16'
-                          >
-                            <path d='M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z'></path>
-                          </svg>
-                        </button>
-                        <input
-                          type='number'
-                          className='w-12 px-2 py-4 text-center border-0 rounded-md bg-gray-50 md:text-right'
-                          placeholder='1'
-                          value={quantity}
-                        />
-                        <button
-                          className='py-2 hover:text-gray-700'
-                          onClick={() => handleCartQty(id, quantity, "inc")}
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='16'
-                            height='16'
-                            fill='currentColor'
-                            className='bi bi-plus'
-                            viewBox='0 0 16 16'
-                          >
-                            <path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z'></path>
-                          </svg>
-                        </button>
+                      <div className='w-auto px-4 text-right md:w-1/6 lg:w-2/12 '>
+                        <p className='text-lg font-bold text-lime-700'>
+                          KES {price * quantity}
+                        </p>
                       </div>
                     </div>
-                    <div className='w-auto px-4 text-right md:w-1/6 lg:w-2/12 '>
-                      <p className='text-lg font-bold text-lime-700'>
-                        KES {price * quantity}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
             <div className='flex flex-wrap items-center gap-4'>
               <span className='text-gray-700'>Apply Coupon</span>
