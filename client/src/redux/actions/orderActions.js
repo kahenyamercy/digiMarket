@@ -1,7 +1,8 @@
 import axios from "axios";
 import { BASE_URL } from "../../URL";
 import { logout } from "./userActions";
-import { getUserOrdersFail, getUserOrdersStart, getUserOrdersSuccess } from "../slices/orderSlices";
+import { createOrderFail, createOrderStart, createOrderSuccess, getUserOrdersFail, getUserOrdersStart, getUserOrdersSuccess } from "../slices/orderSlices";
+import { resetCart } from "../slices/cartSlices";
 
 // GET USER ORDERS
 export const listUserOrders = () => async (dispatch, getState) => {
@@ -26,6 +27,36 @@ export const listUserOrders = () => async (dispatch, getState) => {
     if (errorMessage === "Token has expired") {
       dispatch(logout());
     }
+  }
+};
+
+//  CREATE ORDER
+export const createOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch(createOrderStart());
+
+     const {
+       user: { userInfo },
+     } = getState();
+     const config = {
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${userInfo.token}`,
+       },
+     };
+
+    await axios.post(`${BASE_URL}/orders/create`, order, config);
+
+    dispatch(createOrderSuccess());
+    dispatch(resetCart());
+  } catch (err) {
+    const errorMessage = err.response ? err.response.data.message : err.message;
+    if (errorMessage === "Token has expired") {
+      dispatch(logout());
+    }
+    dispatch(
+      createOrderFail(err.response ? err.response.data.message : err.message)
+    );
   }
 };
 
