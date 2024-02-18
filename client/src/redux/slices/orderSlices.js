@@ -36,6 +36,10 @@ export const orderSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    clearState: (state) => {
+      state.error = null;
+      state.success_create = false;
+    }
   },
 });
 
@@ -45,7 +49,8 @@ export const {
     getUserOrdersFail,
     createOrderStart,
     createOrderSuccess,
-    createOrderFail
+    createOrderFail,
+    clearState
 
 } = orderSlice.actions;
 

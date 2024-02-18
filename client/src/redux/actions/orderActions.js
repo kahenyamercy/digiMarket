@@ -51,12 +51,12 @@ export const createOrder = (order) => async (dispatch, getState) => {
     dispatch(resetCart());
   } catch (err) {
     const errorMessage = err.response ? err.response.data.message : err.message;
-    if (errorMessage === "Token has expired") {
-      dispatch(logout());
-    }
     dispatch(
       createOrderFail(err.response ? err.response.data.message : err.message)
     );
+    if (errorMessage === "Token has expired") {
+      dispatch(logout());
+    }
   }
 };
 

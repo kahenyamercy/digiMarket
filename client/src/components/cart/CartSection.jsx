@@ -9,11 +9,20 @@ import {
 import { createOrder } from "../../redux/actions/orderActions";
 import LoadingSpinner from "../utilComponents/LoadingSpinner";
 import ErrorMessage from "../utilComponents/ErrorMessage";
+import { toast } from "react-toastify";
+import { clearState } from "../../redux/slices/orderSlices";
+
+const ToastObjects = {
+  pauseOnFocusLoss: false,
+  draggable: false,
+  pauseOnHover: false,
+  autoClose: 2000,
+};
 
 const CartSection = () => {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  const { loading, error } = useSelector((state) => state.order);
+  const { loading, error, success_create } = useSelector((state) => state.order);
 
   const [subTotal, setSubTotal] = useState(0);
 
@@ -38,6 +47,14 @@ const CartSection = () => {
     });
     dispatch(createOrder({ amount: subTotal, order_items: orderItems }));
   };
+
+
+  useEffect(() => {
+    if (success_create) {
+      toast.success("Your order has been placed successfully!", ToastObjects);
+      dispatch(clearState());
+    }
+  }, [success_create, dispatch])
 
   useEffect(() => {
     const totals = cartItems
