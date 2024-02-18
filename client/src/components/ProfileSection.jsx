@@ -10,15 +10,23 @@ import { listUserProducts } from "../redux/actions/productActions";
 import LoadingSpinner from "./utilComponents/LoadingSpinner";
 import OrdersTable from "./orders/OrdersTable";
 import { listUserOrders } from "../redux/actions/orderActions";
+import NewProductForm from "./products/NewProductForm";
 
 const ProfileSection = () => {
-  const dispatch = useDispatch()
-  const {loading, error, userProducts} = useSelector((state) => state.product);
-  const {loading: orderLoading, error: orderError, orders} = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+  const { loading, error, userProducts } = useSelector(
+    (state) => state.product
+  );
+  const {
+    loading: orderLoading,
+    error: orderError,
+    orders,
+  } = useSelector((state) => state.order);
   const { userInfo } = useSelector((state) => state.user);
   const [showAccount, setShowAccount] = useState(true);
   const [showProductTab, setShowProductTab] = useState(false);
   const [showOrderTab, setShowOrderTab] = useState(false);
+  const [showNewProductTab, setShowNewProductTab] = useState(false);
   const [userData, setUserData] = useState(userInfo);
   const [userAddressData, setUserAddressData] = useState(userInfo.address);
   const [passData, setPassData] = useState({
@@ -41,6 +49,12 @@ const ProfileSection = () => {
     setPassData({ ...passData, [e.target.name]: e.target.value });
   };
 
+  const toggleNewProductTab = () => {
+    setShowNewProductTab(!showNewProductTab);
+  };
+
+  console.log(showNewProductTab);
+
   const handleTab = (tabname) => {
     if (tabname === "account") {
       setShowAccount(true);
@@ -50,7 +64,7 @@ const ProfileSection = () => {
       setShowProductTab(true);
       setShowAccount(false);
       setShowOrderTab(false);
-    } else if (tabname === "orders"){
+    } else if (tabname === "orders") {
       setShowOrderTab(true);
       setShowAccount(false);
       setShowProductTab(false);
@@ -71,10 +85,10 @@ const ProfileSection = () => {
   };
 
   useEffect(() => {
-    if (showProductTab){
+    if (showProductTab) {
       dispatch(listUserProducts());
     }
-  }, [dispatch, showProductTab])
+  }, [dispatch, showProductTab]);
 
   useEffect(() => {
     if (showOrderTab) {
@@ -403,35 +417,40 @@ const ProfileSection = () => {
         )}
         {/* Products Section */}
         {showProductTab && (
-          <>
-            <section className='w-full rounded md:p-4 mb-4 relative'>
-              <h4 className='font-semibold text-lime-700 text-xl mb-3'>
-                Products
-              </h4>
-              {loading ? (
-                <LoadingSpinner />
+          <section className='w-full rounded md:p-4 mb-4 relative'>
+            <h4 className='font-semibold text-lime-700 text-xl mb-3 px-4 mt-3 md:px-0'>
+              Products
+            </h4>
+            <div className='mb-14'>
+              {showNewProductTab ? (
+                <NewProductForm />
               ) : (
-                error && <ErrorMessage>{error}</ErrorMessage>
+                <>
+                  {loading ? (
+                    <LoadingSpinner />
+                  ) : (
+                    error && <ErrorMessage>{error}</ErrorMessage>
+                  )}
+                  <ProductsTable list={userProducts} />
+                </>
               )}
-              <div className='mb-14'>
-                <ProductsTable list={userProducts} />
-              </div>
-              <button
-                className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                style={{
-                  transition: "width 0.7s ease",
-                  width: isHovered ? "auto" : "40px", // Adjust width as needed
-                  padding: isHovered ? "10px" : "10px", // Adjust padding as needed
-                  justifyContent: isHovered ? "flex-start" : "center",
-                }}
-              >
-                <AddIcon />
-                {isHovered && <h6>Add Product</h6>}
-              </button>
-            </section>
-          </>
+            </div>
+            <button
+              className='bg-lime-700 rounded-lg text-white my-3 flex gap-1 items-center absolute bottom-1 right-1'
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              style={{
+                transition: "width 0.7s ease",
+                width: isHovered ? "auto" : "40px", // Adjust width as needed
+                padding: isHovered ? "10px" : "10px", // Adjust padding as needed
+                justifyContent: isHovered ? "flex-start" : "center",
+              }}
+              onClick={toggleNewProductTab}
+            >
+              <AddIcon />
+              {isHovered && <h6>Add Product</h6>}
+            </button>
+          </section>
         )}
         {/* Orders section */}
         {showOrderTab && (
