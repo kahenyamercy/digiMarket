@@ -5,6 +5,7 @@ const initialState = {
   error: null,
   orders: [],
   success_create: false,
+  isOrderModalOpen: false,
 };
 
 export const orderSlice = createSlice({
@@ -39,7 +40,13 @@ export const orderSlice = createSlice({
     clearState: (state) => {
       state.error = null;
       state.success_create = false;
-    }
+    },
+    openOrderModal: (state) => {
+      state.isOrderModalOpen = true;
+    },
+    closeOrderModal: (state) => {
+      state.isOrderModalOpen = false;
+    },
   },
 });
 
@@ -50,7 +57,9 @@ export const {
     createOrderStart,
     createOrderSuccess,
     createOrderFail,
-    clearState
+    clearState,
+    openOrderModal,
+    closeOrderModal,
 
 } = orderSlice.actions;
 
