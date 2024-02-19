@@ -126,3 +126,16 @@ def get_user_address(address_id):
     """Get Address of a user"""
     address = connection.get(Address, id=address_id)[0]
     return jsonify(address.to_json())
+
+# UPDATE USER DETAILS
+@api_views.route("/users/<int:user_id>/update", methods=['PUT'],  strict_slashes=False)
+@token_required
+def update_user_details(user_id):
+    """Update user details"""
+    data = request.get_json()
+    user = connection.get(User, id=user_id)[0]
+    user.full_name = data.get('full_name', user.full_name)
+    user.email = data.get('email', user.email)
+    user.phone_number = data.get('phone_number', user.phone_number)
+    connection.save(user)
+    return jsonify(user.to_json())
