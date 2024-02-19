@@ -55,8 +55,6 @@ const ProfileSection = () => {
     setShowNewProductTab(!showNewProductTab);
   };
 
-  console.log(showNewProductTab);
-
   const handleTab = (tabname) => {
     if (tabname === "account") {
       setShowAccount(true);
@@ -117,20 +115,30 @@ const ProfileSection = () => {
           <button
             className={`w-full flex gap-2 items-center text-gray-600 mt-3 ${
               showProductTab && "bg-gray-100 rounded"
-            } hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer`}
+            } hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer relative`}
             onClick={() => handleTab("products")}
           >
             <CategoryIcon />
             <h3 className='text-lg my-auto'>Products</h3>
+            {userProducts.length > 0 && (
+              <span className='w-6 h-6 text-sm rounded-full bg-red-500 flex items-center justify-center text-white absolute right-3 top-0 bottom-0 my-auto'>
+                {userProducts.length}
+              </span>
+            )}
           </button>
           <button
             className={`w-full flex gap-2 items-center text-gray-600 mt-3 ${
               showOrderTab && "bg-gray-100 rounded"
-            } hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer`}
+            } hover:bg-gray-100 hover:rounded px-3 py-2 cursor-pointer relative`}
             onClick={() => handleTab("orders")}
           >
             <ShoppingBasketIcon />
             <h3 className='text-lg my-auto'>Orders</h3>
+            {orders.length > 0 && (
+              <span className='w-6 h-6 text-sm rounded-full bg-red-500 flex items-center justify-center text-white absolute right-3 top-0 bottom-0 my-auto'>
+                {orders.length}
+              </span>
+            )}
           </button>
         </div>
         <section className='col-span-1 md:col-span-7 bg-white'>

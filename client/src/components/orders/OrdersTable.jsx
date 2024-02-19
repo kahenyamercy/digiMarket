@@ -14,7 +14,7 @@ export default function OrdersTable({ list }) {
     {
       field: "full_name",
       headerName: "Customer Name",
-      width: 200,
+      width: 150,
     },
     {
       field: "amount",
@@ -23,7 +23,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <div className='flex justify-center'>
-            <h6 className='bg-slate-100 px-2 text-indigo-400 rounded'>
+            <h6 className='px-2 text-indigo-400 rounded'>
               KES {params.row.amount}
             </h6>
           </div>
@@ -38,11 +38,11 @@ export default function OrdersTable({ list }) {
         return (
           <div className='flex justify-center'>
             {params.row.order_paid ? (
-              <h6 className='bg-slate-100 px-2 text-indigo-400 rounded'>
+              <h6 className='px-2 text-green-500 text-xs'>
                 Paid
               </h6>
             ) : (
-              <h6 className='bg-red-400 px-2 text-white rounded-full'>
+              <h6 className='px-2 text-gray-600 text-xs'>
                 Not Paid
               </h6>
             )}
@@ -94,7 +94,7 @@ export default function OrdersTable({ list }) {
       renderCell: (params) => {
         return (
           <div className='flex gap-3 items-center'>
-            <div onClick={handleModal}>
+            <div onClick={() => handleModal(params.row.id)}>
               <VisibilityIcon className='text-blue-400 cursor-pointer' />
             </div>
             <EditIcon className='text-green-400 cursor-pointer' />
@@ -106,8 +106,8 @@ export default function OrdersTable({ list }) {
   ];
   
   const dispatch = useDispatch();
-    const handleModal = () => {
-      dispatch(openOrderModal());
+    const handleModal = (orderId) => {
+      dispatch(openOrderModal(orderId));
     };
   return (
     <div className='grid grid-cols-1'>
