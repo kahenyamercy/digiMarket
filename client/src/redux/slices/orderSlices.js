@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   orders: [],
+  orderDetails: {},
   success_create: false,
   isOrderModalOpen: false,
   orderOpened: null,
@@ -25,9 +26,21 @@ export const orderSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getOrderDetailsStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderDetailsSuccess: (state, action) => {
+      state.loading = false;
+      state.orderDetails = action.payload;
+    },
+    getOrderDetailsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     createOrderStart: (state) => {
       state.loading = true;
-      state.error = false;
+      state.error = null;
       state.success_create = false;
     },
     createOrderSuccess: (state) => {
@@ -54,16 +67,18 @@ export const orderSlice = createSlice({
 });
 
 export const {
-    getUserOrdersStart,
-    getUserOrdersSuccess,
-    getUserOrdersFail,
-    createOrderStart,
-    createOrderSuccess,
-    createOrderFail,
-    clearState,
-    openOrderModal,
-    closeOrderModal,
-
+  getUserOrdersStart,
+  getUserOrdersSuccess,
+  getUserOrdersFail,
+  createOrderStart,
+  createOrderSuccess,
+  createOrderFail,
+  clearState,
+  openOrderModal,
+  closeOrderModal,
+  getOrderDetailsStart,
+  getOrderDetailsSuccess,
+  getOrderDetailsFail,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

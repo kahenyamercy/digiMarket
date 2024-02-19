@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../../URL";
 import { logout } from "./userActions";
-import { createOrderFail, createOrderStart, createOrderSuccess, getUserOrdersFail, getUserOrdersStart, getUserOrdersSuccess } from "../slices/orderSlices";
+import { createOrderFail, createOrderStart, createOrderSuccess, getOrderDetailsFail, getOrderDetailsStart, getOrderDetailsSuccess, getUserOrdersFail, getUserOrdersStart, getUserOrdersSuccess } from "../slices/orderSlices";
 import { resetCart } from "../slices/cartSlices";
 
 // GET USER ORDERS
@@ -54,6 +54,33 @@ export const createOrder = (order) => async (dispatch, getState) => {
     dispatch(
       createOrderFail(err.response ? err.response.data.message : err.message)
     );
+    if (errorMessage === "Token has expired") {
+      dispatch(logout());
+    }
+  }
+};
+
+// GET SINGLE ORDERS
+export const getOrderDetails = () => async (dispatch, getState) => {
+  dispatch(getOrderDetailsStart());
+  try {
+    const {
+      user: { userInfo },
+      order: {orderOpened},
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`${BASE_URL}/orders/${orderOpened}/`, config);
+
+    dispatch(getOrderDetailsSuccess(data));
+  } catch (err) {
+    const errorMessage = err.response ? err.response.data.message : err.message;
+    dispatch(getOrderDetailsFail(errorMessage));
+
     if (errorMessage === "Token has expired") {
       dispatch(logout());
     }

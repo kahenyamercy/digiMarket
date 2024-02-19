@@ -3,9 +3,7 @@ import "./Modal.css";
 import { useSelector } from "react-redux";
 
 function Modal({ children }) {
-  const { isOrderModalOpen, orderOpened } = useSelector((state) => state.order);
-
-  console.log(orderOpened);
+  const { isOrderModalOpen } = useSelector((state) => state.order);
 
   return (
     <div>
