@@ -15,7 +15,6 @@ const OrderSummarry = ({ isModal = false }) => {
     }
   }, [dispatch, orderOpened]);
 
-  console.log(orderDetails);
   return (
     <div
       className={`w-full py-14 px-4 ${
@@ -23,7 +22,7 @@ const OrderSummarry = ({ isModal = false }) => {
       } 2xl:px-20 2xl:container 2xl:mx-auto`}
     >
       <div className='w-full flex flex-col md:flex-row md:justify-between'>
-        <div className='w-full flex justify-start item-start space-y-2 flex-col '>
+        <div className='flex justify-start item-start space-y-2 flex-col '>
           <h1 className='text-3xl lg:text-2xl font-semibold leading-7 lg:leading-9  text-gray-800'>
             Order {orderDetails?.id}
           </h1>
@@ -31,7 +30,7 @@ const OrderSummarry = ({ isModal = false }) => {
             {formattedDate}
           </p>
         </div>
-        <div className='w-full flex justify-start item-start space-y-2 flex-col'>
+        <div className='flex justify-start item-start space-y-2 flex-col'>
           <h1 className='text-xl lg:text-2xl font-semibold leading-7 lg:leading-9  text-gray-700'>
             {orderDetails?.user?.full_name}
           </h1>
@@ -71,7 +70,7 @@ const OrderSummarry = ({ isModal = false }) => {
                       </h3>
                       <div className='flex justify-start items-start flex-col space-y-2'>
                         <p className='text-sm leading-none text-gray-800'>
-                          <span className='text-gray-300'>Style: </span> Italic
+                          <span className='text-gray-300'>Seller: </span> Italic
                           Minimal Design
                         </p>
                         <p className='text-sm leading-none text-gray-800'>
@@ -87,7 +86,6 @@ const OrderSummarry = ({ isModal = false }) => {
                       <p className='text-base xl:text-lg leading-6'>
                         KES {price}{" "}
                         <span className='text-gray-400 text-sm line-through'>
-                          {" "}
                           KES {price + 0.1 * price}
                         </span>
                       </p>
@@ -131,35 +129,27 @@ const OrderSummarry = ({ isModal = false }) => {
             </div>
             <div className='flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 space-y-6   '>
               <h3 className='text-xl font-semibold leading-5 text-gray-800'>
-                Shipping
+                Order Status
               </h3>
-              <div className='flex justify-between items-start w-full'>
-                <div className='flex justify-center items-center space-x-4'>
-                  <div class='w-8 h-8'>
-                    <img
-                      class='w-full h-full'
-                      alt='logo'
-                      src='https://i.ibb.co/L8KSdNQ/image-3.png'
-                    />
-                  </div>
-                  <div className='flex flex-col justify-start items-center'>
-                    <p className='text-lg leading-6 font-semibold text-gray-800'>
-                      DPD Delivery
-                      <br />
-                      <span className='font-normal'>
-                        Delivery with 24 Hours
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <p className='text-lg font-semibold leading-6 text-gray-800'>
-                  $8.00
-                </p>
-              </div>
-              <div className='w-full flex justify-center items-center'>
-                <button className='hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white'>
-                  View Carrier Details
-                </button>
+              <div className='flex justify-between p-6 border border-blue-100 bg-blue-50 md:p-8'>
+                {orderDetails?.order_paid ? (
+                  <h5 className='bg-green-500 text-white w-28 p-2 rounded text-center'>
+                    Paid
+                  </h5>
+                ) : (
+                  <h5 className='bg-red-500 text-white w-28 p-2 rounded text-center'>
+                    Not Paid
+                  </h5>
+                )}
+                {orderDetails?.order_delivered ? (
+                  <h5 className='bg-green-500 text-white p-2 rounded text-center'>
+                    Delivered
+                  </h5>
+                ) : (
+                  <h5 className='bg-red-500 text-white p-2 rounded text-center'>
+                    Not Delivered
+                  </h5>
+                )}
               </div>
             </div>
           </div>
