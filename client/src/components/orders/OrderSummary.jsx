@@ -5,13 +5,15 @@ import { getOrderDetails } from "../../redux/actions/orderActions";
 
 const OrderSummarry = ({ isModal = false }) => {
   const dispatch = useDispatch();
-  const { orderDetails } = useSelector((state) => state.order);
+  const { orderDetails, orderOpened } = useSelector((state) => state.order);
   const formattedDate = moment(orderDetails?.created_at).format(
     "MMMM Do YYYY, h:mm:ss a"
   );
   useEffect(() => {
-    dispatch(getOrderDetails());
-  }, [dispatch]);
+    if (orderOpened) {
+      dispatch(getOrderDetails());
+    }
+  }, [dispatch, orderOpened]);
 
   console.log(orderDetails);
   return (
@@ -20,13 +22,26 @@ const OrderSummarry = ({ isModal = false }) => {
         isModal ? "md:px-6" : "md:px-28"
       } 2xl:px-20 2xl:container 2xl:mx-auto`}
     >
-      <div className='w-full flex justify-start item-start space-y-2 flex-col '>
-        <h1 className='text-3xl lg:text-2xl font-semibold leading-7 lg:leading-9  text-gray-800'>
-          Order {orderDetails?.id}
-        </h1>
-        <p className='text-base font-medium leading-6 text-gray-600'>
-          {formattedDate}
-        </p>
+      <div className='w-full flex flex-col md:flex-row md:justify-between'>
+        <div className='w-full flex justify-start item-start space-y-2 flex-col '>
+          <h1 className='text-3xl lg:text-2xl font-semibold leading-7 lg:leading-9  text-gray-800'>
+            Order {orderDetails?.id}
+          </h1>
+          <p className='text-base font-medium leading-6 text-gray-600'>
+            {formattedDate}
+          </p>
+        </div>
+        <div className='w-full flex justify-start item-start space-y-2 flex-col'>
+          <h1 className='text-xl lg:text-2xl font-semibold leading-7 lg:leading-9  text-gray-700'>
+            {orderDetails?.user?.full_name}
+          </h1>
+          <p className='text-base font-medium leading-6 text-gray-600'>
+            {orderDetails?.user?.email}
+          </p>
+          <p className='text-base font-medium leading-6 text-gray-600'>
+            {orderDetails?.user?.phone_number}
+          </p>
+        </div>
       </div>
       <div className='mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch  w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0'>
         <div className='flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8'>
