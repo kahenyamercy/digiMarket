@@ -83,7 +83,6 @@ const ProfileSection = () => {
       }
     }
   };
-
   useEffect(() => {
     dispatch(listUserProducts());
     dispatch(listUserOrders());
