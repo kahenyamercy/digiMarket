@@ -137,5 +137,7 @@ def update_user_details(user_id):
     user.full_name = data.get('full_name', user.full_name)
     user.email = data.get('email', user.email)
     user.phone_number = data.get('phone_number', user.phone_number)
+    user.password = data.get('password', user.password)
+    user.address_id = data.get('address_id', user.address_id)
     connection.save(user)
     return jsonify(user.to_json())
