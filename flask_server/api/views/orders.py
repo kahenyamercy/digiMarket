@@ -2,10 +2,13 @@
 from api.views import api_views
 from models import connection
 from models.orders import Order, OrderDetails
+from models.user import User
 from models.product import Product
 from flask import request, jsonify
 from models import connection
 from api.views.utils import token_required
+from api.views.users import get_user_details
+import json
 
 @api_views.route("/orders/create", methods=['POST'], strict_slashes=False)
 @token_required
@@ -55,9 +58,11 @@ def get_user_orders(user_id):
         return jsonify({"message": "No orders found!"}), 400
     all_orders = []
     for order in user_orders:
+        user = connection.get(User, id=order.user_id)[0]
         order_info = order.to_json()
         order_info["created_at"] = order.created_at.strftime(
             "%Y-%m-%d %H:%M:%S")
+        order_info["full_name"] = user.full_name
         all_orders.append(order_info)
 
     return jsonify(all_orders), 200
@@ -66,6 +71,7 @@ def get_user_orders(user_id):
 
 
 @api_views.route("/orders/<int:order_id>", methods=['GET'], strict_slashes=False)
+@token_required
 def get_order(order_id):
     order = connection.get(Order, id=order_id)
     if len(order) == 0:
@@ -78,7 +84,11 @@ def get_order(order_id):
         order_item_info = item.to_json()
         order_item_info["product"] = product_info.to_json()
         order_items.append(order_item_info)
-    order_data = {"id": order.id, "order_paid": order.order_paid, "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_delivered": order.order_delivered, "order_items": order_items}
+    user = get_user_details(order.user_id)
+    response_data = user.response[0].decode('utf-8')
+    # Parse the JSON data
+    user_data = json.loads(response_data)
+    order_data = {**order.to_json(), "created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"), "order_items": order_items, "user": user_data}
     return jsonify(order_data), 200
 
 # Delete Order Detail

@@ -10,6 +10,7 @@ import ListIcon from "@mui/icons-material/List";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const {cartItems} = useSelector((state) => state.cart);
   const {userInfo} = useSelector((state) => state.user);
   const handleLogout = () => {
     dispatch(logout());
@@ -38,12 +39,23 @@ const Navbar = () => {
           </button>
         </div>
         <div className='col-span-1 md:col-span-2 flex items-center justify-center md:justify-end gap-2 md:gap-4 absolute top-1 right-1'>
-          <Link to='/profile' className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link
+            to='/profile'
+            className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'
+          >
             <PersonOutlineIcon />
           </Link>
-          <div className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link
+            to='/cart'
+            className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer relative'
+          >
             <ShoppingBasketIcon />
-          </div>
+            {cartItems?.length > 0 && (
+              <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0'>
+                {cartItems.length}
+              </span>
+            )}
+          </Link>
           <div
             className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'
             onClick={handleLogout}

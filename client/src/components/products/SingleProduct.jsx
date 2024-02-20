@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../utilComponents/LoadingSpinner";
 import ErrorMessage from "../utilComponents/ErrorMessage";
 import { getUserInfo } from "../../redux/actions/userActions";
+import { addToCart } from "../../redux/actions/cartActions";
 
 const SingleProduct = () => {
   const params = useParams();
@@ -13,6 +14,10 @@ const SingleProduct = () => {
   const dispatch = useDispatch();
   const {loading, error, product} = useSelector((state) => state.product);
   const {loading: userLoading, error: userError, userDetails} = useSelector((state) => state.user)
+
+  const handleCart = () => {
+    dispatch(addToCart(productId));
+  }
 
   useEffect(() => {
     dispatch(getProduct(productId))
@@ -46,7 +51,7 @@ const SingleProduct = () => {
             </div>
             <div className='flex -mx-2 mb-4'>
               <div className='w-1/2 px-2'>
-                <button className='w-full bg-lime-700 text-white py-2 px-4 rounded-full font-bold hover:bg-green-500 dark:hover:bg-gray-700'>
+                <button className='w-full bg-lime-700 text-white py-2 px-4 rounded-full font-bold hover:bg-green-500 dark:hover:bg-gray-700' onClick={handleCart}>
                   Add to Cart
                 </button>
               </div>
