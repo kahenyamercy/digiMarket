@@ -13,6 +13,7 @@ import { listUserOrders } from "../redux/actions/orderActions";
 import NewProductForm from "./products/NewProductForm";
 import Modal from "./modal/Modal";
 import QuickView from "./orders/QUickView";
+import Toast from "./utilComponents/Toast";
 
 const ProfileSection = () => {
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const ProfileSection = () => {
       <Modal>
         <QuickView />
       </Modal>
+      <Toast />
       <div className='bg-gray-100 p-4 md:px-24 mt-4 grid md:grid-cols-9 gap-5'>
         {/* Navigation bar for profile tabs */}
         <div className='md:col-span-2 bg-white shadow rounded p-4 max-h-80'>
