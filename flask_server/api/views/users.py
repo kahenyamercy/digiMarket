@@ -14,7 +14,7 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 
 def generate_token(data):
     """Generate JWT token"""
-    expiration_time = datetime.utcnow() + timedelta(minutes=30)
+    expiration_time = datetime.utcnow() + timedelta(hours=3)
     data['exp'] = expiration_time
     access_token = jwt.encode(data, JWT_SECRET, algorithm="HS256")
     return access_token

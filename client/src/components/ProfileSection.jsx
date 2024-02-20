@@ -9,7 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { listUserProducts } from "../redux/actions/productActions";
 import LoadingSpinner from "./utilComponents/LoadingSpinner";
 import OrdersTable from "./orders/OrdersTable";
-import { getOrderDetails, listUserOrders } from "../redux/actions/orderActions";
+import { listUserOrders } from "../redux/actions/orderActions";
 import NewProductForm from "./products/NewProductForm";
 import Modal from "./modal/Modal";
 import QuickView from "./orders/QUickView";
@@ -86,7 +86,7 @@ const ProfileSection = () => {
   useEffect(() => {
     dispatch(listUserProducts());
     dispatch(listUserOrders());
-  }, [])
+  }, [dispatch])
   return (
     <>
       <Modal>

@@ -1,7 +1,15 @@
 import React, { useState } from "react";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../../firebase";
 import ErrorMessage from "../utilComponents/ErrorMessage";
 
 const NewProductForm = () => {
+  const bucket_url = process.env.REACT_APP_BUCKET_URL;
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -9,7 +17,8 @@ const NewProductForm = () => {
     description: "",
   });
   const [images, setImages] = useState([]);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [urls, setUrls] = useState([]);
+  const [progress, setProgress] = useState(0);
   const handleChange = (e) => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
   };
@@ -21,6 +30,38 @@ const NewProductForm = () => {
       setImages((prevState) => [...prevState, newImage]);
     }
   };
+
+   const uploadImages = (e) => {
+     e.preventDefault();
+     const promises = [];
+     images.forEach((image) => {
+       const fileName = new Date().getTime() + image.name;
+       const storage = getStorage(app, bucket_url);
+       const storageRef = ref(storage, fileName);
+       const uploadTask = uploadBytesResumable(storageRef, image);
+       promises.push(uploadTask);
+       uploadTask.on(
+         "state_changed",
+         (snapshot) => {
+           const progress = Math.round(
+             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+           );
+           setProgress(progress);
+         },
+         (error) => {
+           //console.log(error);
+         },
+         async () => {
+           await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+             setUrls((prevState) => [...prevState, downloadURL]);
+           });
+         }
+       );
+     });
+     Promise.all(promises)
+       .then(() => alert("All images uploaded"))
+       .catch((err) => console.log(err));
+   };
 
   const handleCreateProduct = (e) => {
     e.preventDefault();
