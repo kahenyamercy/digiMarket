@@ -125,7 +125,7 @@ const NewProductForm = () => {
 
   useEffect(() => {
     if (success){
-      toast.success("Your order has been placed successfully!", ToastObjects);
+      toast.success("Product has been created successfully!", ToastObjects);
       dispatch(listUserProducts());
       dispatch(resetProductState());
     }
