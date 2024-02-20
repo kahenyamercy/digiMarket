@@ -13,6 +13,7 @@ import { getOrderDetails, listUserOrders } from "../redux/actions/orderActions";
 import NewProductForm from "./products/NewProductForm";
 import Modal from "./modal/Modal";
 import QuickView from "./orders/QUickView";
+import { updateUserDetails } from "../redux/actions/userActions";
 
 const ProfileSection = () => {
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ const ProfileSection = () => {
   const handleUpdateUserDetails = (e) => {
     e.preventDefault();
     setFormErr(null);
+    /*
     if (passData.password !== "") {
       if (passData.current_password === "") {
         setFormErr("Current password required!");
@@ -82,6 +84,17 @@ const ProfileSection = () => {
         setFormErr("Password must match!");
       }
     }
+    */
+
+    const user_id = userInfo.id;
+    const payload = {
+      email: userData.email !== userInfo.email ? userData.email : userInfo.email,
+      full_name: userData.full_name !== userInfo.full_name ? userData.full_name : userInfo.full_name,
+      username: userData.username !== userInfo.username ? userData.username : userInfo.username,
+      phone_number: userData.phone_number !== userInfo.phone_number ? userData.phone_number : userInfo.phone_number,
+    }
+    
+    dispatch(updateUserDetails(user_id, payload));
   };
   useEffect(() => {
     dispatch(listUserProducts());
@@ -423,7 +436,7 @@ const ProfileSection = () => {
                 </div>
                 <button
                   type='submit'
-                  className='w-72 bg-lime-400 text-white px-4 py-1 rounded my-3'
+                  className='w-72 hover:cursor-pointer bg-lime-400 text-white px-4 py-1 rounded my-3'
                 >
                   Update details
                 </button>
