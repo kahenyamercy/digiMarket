@@ -138,7 +138,19 @@ def update_user_details(user_id):
     user.email = data.get('email', user.email)
     user.full_name = data.get('full_name', user.full_name)
     user.phone_number = data.get('phone_number', user.phone_number)
-    # user.password = data.get('password', user.password)
-    # user.address_id = data.get('address_id', user.address_id)
+    user.password = data.get('password', user.password)
+    #user.address_id = data.get('address_id', user.address_id)
     connection.save(user)
     return jsonify(user.to_json())
+#UPDATE ADDRESS
+@api_views.route("/address/<int:address_id>/update", methods=['PUT'],  strict_slashes=False)
+@token_required
+def update_user_address(address_id):
+    """Update user address"""
+    data = request.get_json()
+    address = connection.get(Address, id=address_id)[0]
+    address.county = data.get('county', address.county)
+    address.town = data.get('town', address.town)
+    address.village = data.get('village', address.village)
+    connection.save(address)
+    return jsonify(address.to_json())
