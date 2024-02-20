@@ -9,10 +9,14 @@ import {
   userRegisterFail,
   userRegisterStart,
   userRegisterSuccess,
+  updateUserDetailsStart,
+  updateUserDetailsSuccess,
+  updateUserDetailsFail,
 } from "../slices/userSlices";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { BASE_URL } from "../../URL";
+
 
 export const registerUser = (formDetails) => async (dispatch) => {
   try {
@@ -85,5 +89,26 @@ export const getUserInfo =
       }
     }
   };
+  //update userdetails
+export const updateUserDetails = (user_id,updateData) => async (dispatch, getState) => {
+  dispatch(updateUserDetailsStart());
+  try {
+    const {
+      user: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
+    const { data } = await axios.put(`${BASE_URL}/users/${user_id}/update/`, updateData, config);
 
+    dispatch(updateUserDetailsSuccess(data));
+  } catch (err) {
+    const errorMessage = err.response
+      ? err.response.data.message
+      : err.message;
+    dispatch(updateUserDetailsFail(errorMessage));
+  }
+}
