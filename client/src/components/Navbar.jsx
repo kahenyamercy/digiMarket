@@ -11,6 +11,7 @@ import ListIcon from "@mui/icons-material/List";
 const Navbar = () => {
   const dispatch = useDispatch();
   const {cartItems} = useSelector((state) => state.cart);
+  const {categoryList} = useSelector((state) => state.category);
   const {userInfo} = useSelector((state) => state.user);
   const handleLogout = () => {
     dispatch(logout());
@@ -73,39 +74,26 @@ const Navbar = () => {
           id='categorySection'
         >
           <ul className='flex gap-3'>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Fruits
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Vegetables
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Grains
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Legumes
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Potatoes
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Fibres
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Nuts
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Cereals
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Animal Products
-            </li>
+            {categoryList?.map((category) => {
+              return (
+                <li
+                  className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'
+                  key={category.id}
+                >
+                  <Link to={`/shop/category/${category.id}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
         <div className='flex gap-5 items-center'>
-          <h1 className='my-auto font-semibold text-xl text-lime-800'>
-            Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
-          </h1>
+          {userInfo !== null && (
+            <h1 className='my-auto font-semibold text-xl text-lime-800'>
+              Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
+            </h1>
+          )}
           <button
             className='border border-gray-700 rounded px-1 cursor-pointer btn-hide'
             onClick={toggleCategories}

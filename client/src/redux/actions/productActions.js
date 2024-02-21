@@ -3,15 +3,12 @@ import { BASE_URL } from "../../URL";
 import { logout } from "./userActions";
 import { createProductFail, createProductStart, createProductSuccess, getCategoryProductsFail, getCategoryProductsStart, getCategoryProductsSuccess, getProductInfoFail, getProductInfoStart, getProductInfoSuccess, getUserProductsFail, getUserProductsStart, getUserProductsSuccess } from "../slices/productSlices";
 
-export const listCategoryProducts = (category_id) => async (dispatch, getState) => {
+export const listCategoryProducts = (category_id) => async (dispatch) => {
   dispatch(getCategoryProductsStart());
   try {
-    const {
-      user: { userInfo },
-    } = getState();
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
       },
     };
 
@@ -37,11 +34,12 @@ export const listUserProducts =
     dispatch(getUserProductsStart());
     try {
       const {
-        user: { userInfo },
+        user: {userInfo}
       } = getState();
       const config = {
         headers: {
-          Authorization: `Bearer ${userInfo.token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo?.token}`
         },
       };
 
@@ -62,15 +60,12 @@ export const listUserProducts =
 
 // GET SINGLE PRODUCT
 export const getProduct =
-  (product_id) => async (dispatch, getState) => {
+  (product_id) => async (dispatch) => {
     dispatch(getProductInfoStart());
     try {
-      const {
-        user: { userInfo },
-      } = getState();
       const config = {
         headers: {
-          Authorization: `Bearer ${userInfo.token}`,
+          "Content-Type": "application/json",
         },
       };
 

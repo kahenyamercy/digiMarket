@@ -28,7 +28,6 @@ def create_category():
 
 # GET ALL CATEGORY
 @api_views.route("/categories/", methods=['GET'],  strict_slashes=False)
-@token_required
 def get_categories():
     """Get all categories"""
     new_list = []

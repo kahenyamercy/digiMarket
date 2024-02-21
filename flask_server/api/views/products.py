@@ -52,7 +52,6 @@ def get_products():
 
 # GET ALL CATEGORY PRODUCTS
 @api_views.route("/products/category/<int:category_id>/", methods=['GET'],  strict_slashes=False)
-@token_required
 def get_categry_products(category_id):
     """Get all products of a category"""
     new_list = []
