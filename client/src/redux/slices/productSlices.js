@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   products: [],
+  allProducts: [],
   userProducts: [],
   product: {},
   success: false,
@@ -38,6 +39,18 @@ export const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getProductsStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    getProductsSuccess: (state, action) => {
+      state.loading = false;
+      state.allProducts = action.payload;
+    },
+    getProductsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     getUserProductsStart: (state) => {
       state.loading = true;
       state.error = null;
@@ -65,7 +78,7 @@ export const productSlice = createSlice({
     resetProductState: (state) => {
       state.error = null;
       state.success = false;
-    }
+    },
   },
 });
 
@@ -83,6 +96,9 @@ export const {
   createProductSuccess,
   createProductFail,
   resetProductState,
+  getProductsStart,
+  getProductsSuccess,
+  getProductsFail,
 } = productSlice.actions;
 
 export default productSlice.reducer;

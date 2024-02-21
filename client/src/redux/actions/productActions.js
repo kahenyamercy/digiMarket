@@ -1,7 +1,33 @@
 import axios from "axios";
 import { BASE_URL } from "../../URL";
 import { logout } from "./userActions";
-import { createProductFail, createProductStart, createProductSuccess, getCategoryProductsFail, getCategoryProductsStart, getCategoryProductsSuccess, getProductInfoFail, getProductInfoStart, getProductInfoSuccess, getUserProductsFail, getUserProductsStart, getUserProductsSuccess } from "../slices/productSlices";
+import { createProductFail, createProductStart, createProductSuccess, getCategoryProductsFail, getCategoryProductsStart, getCategoryProductsSuccess, getProductInfoFail, getProductInfoStart, getProductInfoSuccess, getProductsFail, getProductsStart, getProductsSuccess, getUserProductsFail, getUserProductsStart, getUserProductsSuccess } from "../slices/productSlices";
+
+// GET ALL PRODUCTS
+export const listProducts = () => async (dispatch) => {
+  dispatch(getProductsStart());
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `${BASE_URL}/products/`,
+      config
+    );
+
+    dispatch(getProductsSuccess(data));
+  } catch (err) {
+    const errorMessage = err.response ? err.response.data.message : err.message;
+    dispatch(getProductsFail(errorMessage));
+
+    if (errorMessage === "Token has expired") {
+      dispatch(logout());
+    }
+  }
+};
 
 export const listCategoryProducts = (category_id) => async (dispatch) => {
   dispatch(getCategoryProductsStart());
