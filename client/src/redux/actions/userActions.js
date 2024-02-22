@@ -1,4 +1,7 @@
 import {
+  getUserInfoFail,
+  getUserInfoStart,
+  getUserInfoSuccess,
   userLoginFail,
   userLoginStart,
   userLoginSuccess,
@@ -9,15 +12,13 @@ import {
 } from "../slices/userSlices";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from "../../URL";
 
 export const registerUser = (formDetails) => async (dispatch) => {
   try {
     dispatch(userRegisterStart());
 
-    const { data } = await axios.post(
-      "http://127.0.0.1:5000/api/v1/users/create/",
-      formDetails
-    );
+    const { data } = await axios.post(`${BASE_URL}/users/create/`, formDetails);
 
     console.log(data);
 
@@ -35,13 +36,13 @@ export const login = (formDetails) => async (dispatch) => {
     dispatch(userLoginStart());
 
     const { data } = await axios.post(
-      "http://127.0.0.1:5000/api/v1/users/login/",
+      `${BASE_URL}/users/login/`,
       formDetails
     );
 
     const decodedInfo = jwtDecode(data.access_token);
     localStorage.setItem("token", JSON.stringify(data.access_token));
-    dispatch(userLoginSuccess(decodedInfo));
+    dispatch(userLoginSuccess({...decodedInfo, token: data.access_token}));
   } catch (err) {
     console.log(err);
     dispatch(
@@ -54,3 +55,35 @@ export const logout = () => (dispatch) => {
   dispatch(userLogout());
   localStorage.removeItem("token");
 };
+
+
+// GET USER INFO
+export const getUserInfo =
+  (user_id) => async (dispatch, getState) => {
+    dispatch(getUserInfoStart());
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`${BASE_URL}/users/${user_id}/`, config);
+
+      dispatch(getUserInfoSuccess(data));
+    } catch (err) {
+      const errorMessage = err.response
+        ? err.response.data.message
+        : err.message;
+      dispatch(getUserInfoFail(errorMessage));
+
+      if (errorMessage === "Token has expired") {
+        dispatch(logout());
+      }
+    }
+  };
+
+

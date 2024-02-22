@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+from sqlalchemy.ext.declarative import declarative_base
 
 
+Base = declarative_base()
 class BaseModel():
     """Base class for all models in the application."""
     def to_json(self):
