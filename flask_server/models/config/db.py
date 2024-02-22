@@ -2,11 +2,19 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from os import getenv
+from dotenv import load_dotenv
 from models.user import User
 from models.base import Base
 from models.product import Product,  Category, ProductCategory
 from models.orders import Order, OrderDetails
+import os
+
+load_dotenv()
+
+MYSQL_USER = os.getenv("MYSQL_USER")
+MYSQL_PWD = os.getenv("MYSQL_PWD")
+MYSQL_HOST = os.getenv("MYSQL_HOST")
+MYSQL_DB= os.getenv("MYSQL_DB")
 
 classes = {"User":User, "Product":Product, "Category":Category, "ProductCategory":ProductCategory, "Order": Order, "OrderDetails": OrderDetails}
 class DBConnection:
@@ -14,10 +22,6 @@ class DBConnection:
     __session = None
     
     def __init__(self):
-        MYSQL_USER = getenv("MYSQL_USER")
-        MYSQL_PWD = getenv("MYSQL_PWD")
-        MYSQL_HOST = getenv("MYSQL_HOST")
-        MYSQL_DB= getenv("MYSQL_DB")
         self.__engine = create_engine("mysql+pymysql://{}:{}@{}/{}".format(MYSQL_USER, MYSQL_PWD, MYSQL_HOST, MYSQL_DB))
         
     
