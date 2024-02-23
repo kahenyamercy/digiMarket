@@ -47,7 +47,7 @@ const Register = () => {
       });
       navigate('/login');
     }
-  }, [success]);
+  }, [success, navigate, dispatch]);
 
   return (
     <div className='register-cont'>
