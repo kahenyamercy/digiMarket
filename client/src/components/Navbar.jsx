@@ -10,6 +10,8 @@ import ListIcon from "@mui/icons-material/List";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const {cartItems} = useSelector((state) => state.cart);
+  const {categoryList} = useSelector((state) => state.category);
   const {userInfo} = useSelector((state) => state.user);
   const handleLogout = () => {
     dispatch(logout());
@@ -38,12 +40,23 @@ const Navbar = () => {
           </button>
         </div>
         <div className='col-span-1 md:col-span-2 flex items-center justify-center md:justify-end gap-2 md:gap-4 absolute top-1 right-1'>
-          <Link to='/profile' className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link
+            to='/profile'
+            className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'
+          >
             <PersonOutlineIcon />
           </Link>
-          <div className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'>
+          <Link
+            to='/cart'
+            className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer relative'
+          >
             <ShoppingBasketIcon />
-          </div>
+            {cartItems?.length > 0 && (
+              <span className='w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute top-0 right-0'>
+                {cartItems.length}
+              </span>
+            )}
+          </Link>
           <div
             className='flex bg-slate-100 p-2 rounded-full text-lime-700 cursor-pointer'
             onClick={handleLogout}
@@ -61,39 +74,26 @@ const Navbar = () => {
           id='categorySection'
         >
           <ul className='flex gap-3'>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Fruits
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Vegetables
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Grains
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Legumes
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Potatoes
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Fibres
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Nuts
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Cereals
-            </li>
-            <li className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'>
-              Animal Products
-            </li>
+            {categoryList?.map((category) => {
+              return (
+                <li
+                  className='text-gray-800 uppercase cursor-pointer my-auto border-b border-transparent hover:border-b hover:border-gray-700'
+                  key={category.id}
+                >
+                  <Link to={`/shop/category/${category.id}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
         <div className='flex gap-5 items-center'>
-          <h1 className='my-auto font-semibold text-xl text-lime-800'>
-            Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
-          </h1>
+          {userInfo !== null && (
+            <h1 className='my-auto font-semibold text-xl text-lime-800'>
+              Hi, <span className='text-gray-800'>{userInfo?.full_name}</span>
+            </h1>
+          )}
           <button
             className='border border-gray-700 rounded px-1 cursor-pointer btn-hide'
             onClick={toggleCategories}

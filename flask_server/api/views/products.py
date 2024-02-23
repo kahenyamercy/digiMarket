@@ -34,7 +34,6 @@ def create_product():
 
 # GET ALL PRODUCTS
 @api_views.route("/products/", methods=['GET'],  strict_slashes=False)
-@token_required
 def get_products():
     """Get all products"""
     new_list = []
@@ -53,7 +52,6 @@ def get_products():
 
 # GET ALL CATEGORY PRODUCTS
 @api_views.route("/products/category/<int:category_id>/", methods=['GET'],  strict_slashes=False)
-@token_required
 def get_categry_products(category_id):
     """Get all products of a category"""
     new_list = []
@@ -66,7 +64,6 @@ def get_categry_products(category_id):
 
 # GET SINGLE PRODUCTS
 @api_views.route("/products/<int:product_id>/", methods=['GET'],  strict_slashes=False)
-@token_required
 def get_product(product_id):
     """Get product by id"""
     product_list = connection.get(Product, id=product_id)

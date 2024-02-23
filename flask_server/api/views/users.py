@@ -14,7 +14,7 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 
 def generate_token(data):
     """Generate JWT token"""
-    expiration_time = datetime.utcnow() + timedelta(minutes=30)
+    expiration_time = datetime.utcnow() + timedelta(hours=3)
     data['exp'] = expiration_time
     access_token = jwt.encode(data, JWT_SECRET, algorithm="HS256")
     return access_token
@@ -29,9 +29,8 @@ def create_user():
         return {"message": "Address fields required!"}, 400
     else:
         data = request.get_json()
-        user = connection.get(User, username=data['username'])[0]
-        print(user)
-        if user:
+        user = connection.get(User, username=data['username'])
+        if len(user) > 0:
             return jsonify({"message": "User already exists!"}), 400
         village = data.get('village', None)
         address = Address(
@@ -126,3 +125,19 @@ def get_user_address(address_id):
     """Get Address of a user"""
     address = connection.get(Address, id=address_id)[0]
     return jsonify(address.to_json())
+
+# UPDATE USER DETAILS
+@api_views.route("/users/<int:user_id>/update", methods=['PUT'],  strict_slashes=False)
+@token_required
+def update_user_details(user_id):
+    """Update user details"""
+    data = request.get_json()
+    user = connection.get(User, id=user_id)[0]
+    user.username = data.get('username', user.username)
+    user.email = data.get('email', user.email)
+    user.full_name = data.get('full_name', user.full_name)
+    user.phone_number = data.get('phone_number', user.phone_number)
+    # user.password = data.get('password', user.password)
+    # user.address_id = data.get('address_id', user.address_id)
+    connection.save(user)
+    return jsonify(user.to_json())

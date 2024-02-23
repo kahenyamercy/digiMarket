@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/actions/userActions";
 import LoadingSpinner from "../components/utilComponents/LoadingSpinner";
@@ -7,6 +7,7 @@ import ErrorMessage from "../components/utilComponents/ErrorMessage";
 
 const Register = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const { loading, error, success } = user;
 
@@ -44,6 +45,7 @@ const Register = () => {
         village: "",
         role: "",
       });
+      navigate('/login');
     }
   }, [success]);
 
@@ -153,7 +155,7 @@ const Register = () => {
                 type='password'
                 id='password'
                 placeholder='********'
-                name='password'
+                name='role'
                 onChange={handleChange}
                 value={userInfo.role}
               />

@@ -10,6 +10,7 @@ import AgricultureIcon from "@mui/icons-material/Agriculture";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import FeaturedCard from "../components/featuresProducts/FeaturedCard";
 import Footer from "../components/Footer";
+import ShopSection from "../components/shop/ShopSection";
 
 const Home = () => {
   const { categoryList } = useSelector(
@@ -90,6 +91,7 @@ const Home = () => {
         <h1 className='text-gray-900 text-xl font-semibold'>New Products</h1>
         <FeaturedCard />
       </div>
+      <ShopSection />
       <Footer />
     </div>
   );
